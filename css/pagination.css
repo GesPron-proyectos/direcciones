@@ -1,0 +1,53 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+/*--EMP MOLDEMAESTRUM 1.0--*/
+
+
+
+/*--PAGINATION--*/
+
+
+
+div.pagination { width:457px;  _width:447px; height:20px; float:left;}
+
+
+
+/*--Pagination--*/
+
+
+
+		div.pagination a:link, div.pagination a:visited{ color:#7F7E7E; float:left; line-height:16px;}
+
+		div.pagination a:hover, div.pagination a:active { color:#000;}
+
+		div.pagination span.current{ color:#F5A337; float:left;line-height:16px; font-weight:bold;}
+
+		div.pagination span.items,div.pages span.total_items{color:#666; padding:0px 5px; text-decoration:none;}
+
+		span.scorepag { float:left; margin:0 2px;}
+
+		
+
+
+
+div.pagination a.first, div.pagination a.back, div.pagination a.forward, div.pagination a.last { width:16px; height:0; color:#03F;  padding-top:16px; overflow:hidden; float:left; margin:0 2px;}
+
+
+
+div.pagination a.first {  background:url(../img/arrow_not_first.gif) 0 0 no-repeat}
+
+div.pagination a.back {  background:url(../img/arrow_not_prev.gif) 0 0 no-repeat}
+
+div.pagination a.forward {  background:url(../img/arrow_not_next.gif) 0 0 no-repeat}
+
+div.pagination a.last {  background:url(../img/arrow_not_last.gif) 0 0 no-repeat}
+
+
+
+div.t-pagination div.pag { float:right; display:inline; }
+
+div.t-pagination span.current{ color:#578698; font-weight:bold;}
+
+div.pag { float:right; height:25px; }

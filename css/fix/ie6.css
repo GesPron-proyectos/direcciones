@@ -1,0 +1,49 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+h2 { float:left;  display:inline!important;}
+
+span.ico-manual-big { display:inline; }
+
+  div.h-tools a.manual {  width:116px; }
+
+  div.h-tools a.logout { width:110px;  }
+
+    div.texto div.blq-a  { margin-right:10px;}
+
+  div.texto div.blq-a img { float:left;  }
+
+  div.registrar div.table-m-sep-title span.icono { background:none; width:0px; }
+
+  div.registrar div.caja div.ingreso { width:315px; }
+
+  div.dos  div.mensaje {  margin-left:40px; }
+
+  div.footer-1 { padding-bottom:5px;}
+
+   div.m-sec-title  div.table-m-sep-title div.breadcrumbs { display:none;}
+
+ div.content div.table-m-sep div.table-m-sep-title h1 { width:350px;} 
+
+ div.t-pagination div.pag { width:180px;  }
+
+ div.agregar-noticia div.campo {  margin-right:15px;}
+
+ div.table-m-sep-title h2 { display:inline; }
+ div.table-m-sep-tools { width:436px; float:right;}
+
+tr.a td.tools, tr.b td.tools  { width:200px; }
+
+div.tabla-listado table.listado tr.menu td.nombre { width:0px; }
+div.agregar-noticia div.campo input, div.agregar-noticia div.campo select { margin-left:5px; margin-right:10px;}
+
+div.cont-form { float:left;  margin-right:10px;}
+a.ico-excel { margin-top:10px; }
+input.boton { margin-top:5px;  }
+
+tr.menu { border-collapse:collapse; background-color:#E4ECF0; border:1px solid #CDCCCC; }
+tr.menu td   { border-collapse:collapse; background-color:#E4ECF0; border:1px solid #CDCCCC; }
+tr td { text-align:left; }
+tr.a td {  border-collapse:collapse; background-color:#FFFFFF; }
+tr.b td  { border-collapse:collapse;}

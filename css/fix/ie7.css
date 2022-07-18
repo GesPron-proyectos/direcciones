@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/* CSS Document */
+div.bql div.dos div.mensaje {  margin-bottom:20px;  }
+
+div.dos { width:875px; }
+
+div.dos  div.mensaje { margin-bottom:20px;}
+
+  div.table-m-sep-title h2 { float:left; width:300px;}
+
+div.tabla-listado table.listado tr.menu td.nombre { width:0px; }
+
+
+div.mainmenu {  margin-top:25px;} 
+
+tr.menu { border-collapse:collapse; background-color:#E4ECF0; border:1px solid #CDCCCC; }
+tr.menu td   { border-collapse:collapse; background-color:#E4ECF0; border:1px solid #CDCCCC; }
+tr td { text-align:left; }
+tr.a td {  border-collapse:collapse; background-color:#FFFFFF; }
+tr.b td  { border-collapse:collapse;}

@@ -1,0 +1,484 @@
+<?php
+class Doc extends CI_Controller {
+	public $data = array();
+	protected $show_tpl = TRUE;
+	public function Doc() { $this->__construct(); }
+	function __construct() {
+		parent::__construct(); 	
+		$this->load->library ( 'form_validation' );
+		$this->load->library ( 'session' );
+		$this->load->model ( 'usuarios_m' );
+		$this->load->model ( 'comunas_m' );
+		$this->load->model ( 'documento_m' );
+		$this->load->model ( 'mandantes_m' );
+		$this->load->model ( 'estados_cuenta_m' );
+		$this->load->model ( 'cuentas_m' );
+		$this->load->model ( 'etapas_m' );
+		$this->load->model ( 'cuentas_etapas_m' );
+		$this->load->model ( 'pagare_m' );
+		$this->load->model ( 'tipo_productos_m' );
+		//$this->output->enable_profiler(TRUE);
+		/*seters*/
+		$this->data['current'] = 'usuarios';
+		$this->data['plantilla'] = 'usuarios/';
+		$this->data['lists'] = array();
+		error_reporting(E_ALL);
+		date_default_timezone_set("Chile/Continental");
+		
+		/*seters*/
+		$this->data['current'] = 'doc';
+		$this->data['plantilla'] = 'doc/';
+		$this->data['lists'] = array();
+		$this->data['current_pag'] = '';
+		$this->data['exito'] = '';
+		
+	}
+
+	
+	public function index(){
+		
+		if($_POST){
+			$this->$_POST['tipo_documento']($_POST);
+		}
+		
+		$this->data['estados_cuenta'] = $this->estados_cuenta_m->get_many_by(array('activo'=>'S'));
+		$this->data['mandantes'] = $this->mandantes_m->get_many_by(array('activo'=>'S'));
+		$this->data['etapas'] = $this->etapas_m->get_many_by(array('activo'=>'S'));
+		
+		
+		$this->data['plantilla'] = 'doc/generar'; 
+		$this->load->view ( 'backend/index', $this->data );
+	}
+	
+
+	
+	public function generardoc() {
+		
+		//$this->output->enable_profiler(TRUE); 
+		$documentos_array['demanda_ejecutiva_pagare_falabella.docx'] = 'Demanda Ejecutiva Pagaré Falabella';
+		$documentos_array['v3_demanda_ejecutiva_pagare_estudiantes_gtia_estatal.docx'] = 'Demanda Ejecutiva Pagaré Estudiantes Garantía Estatal';
+		
+		$tipo_documento = $this->input->post('tipo_documento');
+		//echo $tipo_documento;
+		
+		$where['cta.id_mandante']		= $this->input->post('mandante');
+		$where['cta.id_estado_cuenta']	= $this->input->post('estado_cuenta');
+		if ($this->input->post('id_etapa_original')>0){
+			$where['cta.id_etapa']			= $this->input->post('id_etapa_original');
+		}
+		
+		//$where['cta.id']		=	$id;
+		$where['cta.activo']	=	'S';
+		
+		$select = array();
+		$select[] = 'cta.id AS id';
+		$select[] = 'cta.activo AS activo';
+		$select[] = 'cta.publico AS publico';
+		$select[] = 'cta.posicion AS posicion';
+		$select[] = 'cta.id_procurador';
+		$select[] = 'cta.n_pagare';
+		$select[] = 'cta.fecha_asignacion AS fecha_asignacion';
+		$select[] = 'cta.monto_demandado AS monto_demandado';
+		$select[] = 'cta.monto_deuda AS monto_deuda';
+		$select[] = 'cta.id_estado_cuenta AS id_estado_cuenta';
+		$select[] = 'cta.id_mandante AS field_categoria';
+		
+		$select[] = 'cta.fecha_escritura_personeria AS fecha_escritura_personeria';
+		$select[] = 'cta.notaria_personeria AS notaria_personeria';
+		$select[] = 'cta.titular_personeria AS titular_personeria';
+		
+		
+		$select[] = 'usr.nombres AS nombres';
+		$select[] = 'usr.ap_pat AS ap_pat';
+		$select[] = 'usr.ap_mat AS ap_mat';
+		$select[] = 'usr.rut AS rut';
+		$select[] = 'usr.direccion AS direccion';
+		$select[] = 'usr.direccion_numero AS direccion_numero';
+		$select[] = 'usr.ciudad AS ciudad';
+		$select[] = 'com.nombre AS comuna';
+		
+		$select[] = 'mand.razon_social';
+		$select[] = 'mand.rut AS mandante_rut';
+		$select[] = 'mand.representante_nombre';
+		$select[] = 'mand.representante_apepat';
+		$select[] = 'mand.representante_apemat';
+		$select[] = 'mand.representante_comuna';
+		$select[] = 'mand.representante_ciudad';
+		$select[] = 'mand.representante_direccion';
+		$select[] = 'mand.representante_direccion_n';
+		$select[] = 'mand.fecha_escritura_publica';
+		$select[] = 'mand.numero_repetorio';
+		$select[] = 'mand.notaria';
+		$select[] = 'mand.fecha_escritura_apoderado';
+		$select[] = 'mand.notaria_apoderado';
+		
+		$select[] = 'adm.rut_procurador AS procurador_rut';
+		$select[] = 'adm.nombres AS procurador_nombres';
+		$select[] = 'adm.apellidos AS procurador_apellidos';
+		
+		$select[] = 'tip.tipo AS tipo_producto';
+		$select[] = 'SUM(pag.monto_pagado) AS total_pagado';
+
+		$query = $this->db->select( $select )
+				 ->join("0_usuarios usr", "usr.id = cta.id_usuario")
+				 ->join("0_mandantes mand", "mand.id = cta.id_mandante","left")	
+				 ->join("s_tipo_productos tip", "tip.id = cta.id_tipo_producto","left")	
+				 ->join("2_cuentas_pagos pag", "pag.id_cuenta = cta.id AND pag.activo='S'","left")
+				 ->join("0_administradores adm", "adm.id = cta.id_procurador","left")
+				 ->join("s_comunas com", "com.id = usr.id_comuna","left")
+				 		 
+				 ->where($where)
+				 ->order_by("id_mandante", "desc")
+				 ->order_by("cta.fecha_asignacion", "desc")
+				 ->group_by("cta.id")
+ 				 ->get("0_cuentas cta");
+		$datos = $query->result();
+		
+		/*echo '<pre>';
+		print_r($datos);
+		echo '</pre>';*/
+		if(count($datos)>0){
+
+			$zip = new ZipArchive();
+			$nombre_zip = uniqid().'__'.date("d-m-Y__H-i-s");
+			$filename = './documentos_zip/'.$nombre_zip.'.zip';
+			
+			if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) {
+			    exit("cannot open <$filename>\n");
+			}
+	
+			foreach($datos as $key=>$val){
+				
+				//
+				$c1[] = $this->pagare_m->get_columns();
+				$c2[] = $this->tipo_productos_m->get_columns();
+				$c = array_merge($c1, $c2);
+				foreach ($c as $campo) {
+					foreach ($campo as $dato) {
+						$cols[] = $dato;
+					}
+				}
+				$this->db->order_by('pa.fecha_asignacion', 'DESC');
+				if($val->id !=''){
+					$this->db->where('pa.idcuenta', $val->id);
+				}
+				$this->db->select($cols);
+				$this->db->from('pagare pa');
+				$this->db->join('s_tipo_productos tp', 'tp.id = pa.id_tipo_producto','left');
+				$query = $this->db->get();
+				$pagares_array = array();
+				$pagares_array = $query->result();
+				$monto_deuda = 0;
+				$pagares = '';
+				if (count($pagares_array)>0){
+					
+					$xmlSource = "http://indicadoresdeldia.cl/webservice/indicadores.xml";
+					$xml = simplexml_load_file($xmlSource);
+					
+					$uf = str_replace(array('$','.',','),array('','','.'),$xml->indicador->uf);
+
+					
+					foreach ($pagares_array as $k=>$v){
+						$monto_deuda+= $v->pagare_monto_deuda;
+						$pagares.='•	Pagaré Nº '.$v->pagare_n_pagare.', suscrito con fecha '.date("d/m/Y", strtotime($v->pagare_fecha_asignacion)).', ';
+						$pagares.='por la suma de '.$v->pagare_monto_deuda.' Unidades de Fomento, por concepto de capital.<br>';
+					}
+				}
+				
+				
+				
+				require_once './doc_library/classes/CreateDocx.inc';
+				$docx = new CreateDocx();
+				$docx->addTemplate('./documentos_base/'.$tipo_documento);
+		
+				
+				$nombre_archivo = uniqid().'__'.date("d-m-Y__H-i-s");
+			    
+			    $docx->addTemplateVariable('NOMBRE_MANDANTE', $val->razon_social);
+			    $docx->addTemplateVariable('RUT_MANDANTE', $val->mandante_rut);
+			    		    
+			    $docx->addTemplateVariable('NOMBRE', strtoupper($val->nombres));
+			    $docx->addTemplateVariable('APELLIDO_PATERNO', strtoupper($val->ap_pat));
+			    $docx->addTemplateVariable('APELLIDO_MATERNO',strtoupper($val->ap_mat));
+			    $docx->addTemplateVariable('RUT_DEMANDADO', $val->rut);
+			    $docx->addTemplateVariable('DIRECCION', strtoupper($val->direccion));
+			    $docx->addTemplateVariable('DIRECCION_NUMERO', strtoupper($val->direccion_numero));
+			    $docx->addTemplateVariable('COMUNA', strtoupper($val->comuna));
+			    
+			    $docx->addTemplateVariable('REPRESENTANTE_DEL_ MANDANTE', strtoupper($val->mandante_nombre.' '.$val->mandante_apepat.' '.$val->mandante_apemat));
+			     
+			    $docx->addTemplateVariable('N_PAGARE', $val->n_pagare);
+			    $docx->addTemplateVariable('MONTO_PAGARE', $monto_deuda.'');
+			   
+			    $monto_pagare_peso = number_format(($monto_deuda*$uf),0,',','.');
+			    $docx->addTemplateVariable('MONTO_PAGARE_PESO', '$'.$monto_pagare_peso);
+
+			    $docx->addTemplateVariable('FECHA', date('d/m/Y'));
+			    
+			 	if ($pagares!=''){
+			    	$docx->replaceTemplateVariableByHTML('PAGARES', 'inline', $pagares);
+			    }
+			    
+			    
+			    
+			    if($val->fecha_asignacion != '' || $val->fecha_asignacion != '0'){
+			    	$docx->addTemplateVariable('DÍA_DE_VENCIMIENTO_DEL_PAGARE', date("d", strtotime($val->fecha_asignacion)) );
+			    	$docx->addTemplateVariable('MES_DE_VENCIMIENTO_DEL_PAGARE', date("m", strtotime($val->fecha_asignacion)) );
+			    	$docx->addTemplateVariable('ANO_DE_VENCIMIENTO_DEL_PAGARE', date("Y", strtotime($val->fecha_asignacion)) );
+			    	$docx->addTemplateVariable('FECHA_DE_VENCIMIENTO_DEL_PAGARE', date("d/m/Y", strtotime($val->fecha_asignacion)) );
+			    }else{
+			    	$docx->addTemplateVariable('DÍA_DE_VENCIMIENTO_DEL_PAGARE', '____' );
+			    	$docx->addTemplateVariable('MES_DE_VENCIMIENTO_DEL_PAGARE', '____' );
+			    	$docx->addTemplateVariable('ANO_DE_VENCIMIENTO_DEL_PAGARE', '____' );
+			    }
+			    
+			    $docx->addTemplateVariable('NOMBRE_R', strtoupper($val->representante_nombre ));
+			    $docx->addTemplateVariable('APELLIDO_PATERNO_R', strtoupper($val->representante_apepat));
+			    $docx->addTemplateVariable('APELLIDO_MATERNO_R', strtoupper($val->representante_apemat));
+	
+			    $docx->addTemplateVariable('DIRECCION_Y_NUMERO_R', strtoupper($val->representante_direccion.' '.$val->representante_direccion_n));
+			    $docx->addTemplateVariable('COMUNA_R', strtoupper($val->representante_comuna));
+			    $docx->addTemplateVariable('CIUDAD_R', strtoupper($val->representante_ciudad));
+			    
+			    $docx->addTemplateVariable('FECHA_ESCRITURA_PUBLICA', strtoupper($val->fecha_escritura_publica));
+			    $docx->addTemplateVariable('NOTARIA', strtoupper($val->notaria));
+			    $docx->addTemplateVariable('NUMERO_REPERTORIO', strtoupper($val->numero_repertorio));
+				
+			    
+			    $docx->addTemplateVariable('FECHA_ESCRITURA_PERSONERIA', strtoupper($val->fecha_escritura_personeria));
+			    $docx->addTemplateVariable('NOTARIA_PERSONERIA', strtoupper($val->notaria_personeria));
+			    $docx->addTemplateVariable('TITULAR_PERSONERIA', strtoupper($val->titular_personeria));
+			    
+			    $docx->addTemplateVariable('FECHA_ESCRITURA_APODERADO', strtoupper($val->fecha_escritura_apoderado));
+			    $docx->addTemplateVariable('NOTARIA_APODERADO', strtoupper($val->notaria_apoderado));
+
+			    
+			    $docx->addTemplateVariable('DEUDA_TOTAL', $val->monto_deuda);
+			    
+			    $docx->addTemplateVariable('NOMBRE_DEMANDANTE', strtoupper($val->representante_nombre));
+			    $docx->addTemplateVariable('APELLIDO_PATERNO_DEMANDANTE', strtoupper($val->representante_apepat));
+			    $docx->addTemplateVariable('APELLIDO_MATERNO_ DEMANDANTE', strtoupper($val->representante_apemat));
+			    
+			    $docx->addTemplateVariable('PROCURADOR', strtoupper($val->procurador_nombres.' '.$val->procurador_apellidos));
+			    $docx->addTemplateVariable('RUT_PROCURADOR', $val->procurador_rut);
+	
+			    
+			    $id = $val->id;
+			    	
+					if (file_exists(base_url().'documentos/'.$nombre_archivo.'.docx')) {
+						$nombre_archivo = uniqid().'__'.date("d-m-Y__H-i-s");
+						
+						$fields = array();
+						$fields['idcuenta'] 		= $id;
+						$fields['nombre_documento']	= $nombre_archivo.'.docx';
+						$fields['id_etapa']			= $_POST['id_etapa'];
+						$fields['fecha_crea']		= date("Y-m-d H:i:s");
+						$fields['tipo_documento']	= $documentos_array[$tipo_documento];
+						$fields['archivo_zip']		= $nombre_zip.'.zip';
+						
+						$this->documento_m->insert( $fields ,false,true);
+						
+						$docx->createDocx('./documentos/'.$nombre_archivo);
+						
+						
+					}else{
+						
+						$fields = array();
+						$fields['idcuenta'] 		= $id;
+						$fields['nombre_documento']	= $nombre_archivo.'.docx';
+						$fields['id_etapa']			= $_POST['id_etapa'];
+						$fields['fecha_crea']		= date("Y-m-d H:i:s");
+						$fields['tipo_documento']	= $documentos_array[$tipo_documento];
+						$fields['archivo_zip']		= $nombre_zip.'.zip';
+						
+						$this->documento_m->insert($fields,false,true);
+						
+						$docx->createDocx('./documentos/'.$nombre_archivo);
+					}
+					
+				
+				$this->cuentas_m->save_default(array('id_etapa'=>$_POST['id_etapa']),$id);
+				$this->cuentas_etapas_m->save_default(array('id_cuenta'=>$id,'id_etapa'=>$_POST['id_etapa'],'fecha_etapa'=>date('Y-m-d'),'id_administrador'=>$this->session->userdata('usuario_id')),'');
+				
+				$this->data['exito'] = 'Se ha creado exitosamente los documentos.';
+				
+				$zip->addFile('./documentos/'.$nombre_archivo.'.docx',$nombre_archivo.'.docx');
+				
+			} 
+			$zip->close();
+		}
+		
+		redirect('admin/doc/all');
+	}
+	
+	
+	public function upload($idcuenta=''){
+		
+		$encriptado = uniqid().'__'.date("d-m-Y__H-i-s");
+		$archivo = explode(".", $_FILES['file']['name']);
+		
+		$config['upload_path'] = './documentos/';
+		$config['allowed_types'] = '*';
+		//$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size']	= '100';
+		$config['max_width']  = '1024';
+		$config['max_height']  = '768';
+		$config['file_name']  = str_replace(" ", "_", $archivo[0]).'_'.$encriptado.'.'.$archivo[1];
+		
+		$this->load->library('upload', $config);
+		if (! $this->upload->do_upload('file') ){
+			$error = $this->upload->display_errors();
+			echo $error;
+		}else{
+			///$data = array('upload_data' => $this->upload->data());
+			if( $this->input->post('otro_upload') != '' ){
+				$this->documento_m->insert(array('idcuenta'=>$idcuenta,'id_etapa'=>$this->input->post('otro_upload'),'nombre_documento'=>$config['file_name'],'fecha_crea'=>date("Y-m-d H:i:s"),'tipo_documento'=>'Archivo Subido.'),false,true);
+			}else{
+				$this->documento_m->insert(array('idcuenta'=>$idcuenta,'id_etapa'=>$this->input->post('id_etapa'),'nombre_documento'=>$config['file_name'],'fecha_crea'=>date("Y-m-d H:i:s"),'tipo_documento'=>'Archivo Subido.'),false,true);
+			}
+			
+			echo '1';
+		}
+		
+	}
+	
+	
+	public function reload_doc($idcuenta=''){
+		
+		
+		$c1[] = $this->documento_m->get_columns();
+		$c2[] = $this->cuentas_m->get_columns();
+		$c3[] = $this->mandantes_m->get_columns();
+		$c4[] = $this->etapas_m->get_columns();
+		
+		$c = array_merge($c1, $c2,$c3,$c4);
+		foreach ($c as $campo) {
+			foreach ($campo as $dato) {
+				$cols[] = $dato;
+			}
+		}
+		$this->db->where(array('doc.idcuenta'=>$idcuenta));
+		$this->db->order_by('doc.iddocumento', 'DESC');
+		
+		$this->db->select($cols);
+		$this->db->from('documento doc');
+		$this->db->join('0_cuentas c', 'c.id = doc.idcuenta');
+		$this->db->join('0_mandantes m', 'm.id = c.id_mandante');
+		$this->db->join('s_etapas e', 'e.id = doc.id_etapa','left');
+		
+		$query = $this->db->get();
+
+		$this->data['documentos'] = $query->result();
+		$this->load->view ( 'backend/templates/doc/table_doc', $this->data );
+	}
+	
+	
+	public function all($tipo=''){
+		
+		
+		if( $this->session->userdata("usuario_perfil") == 3 ){
+	    	$where["c.id_procurador"] = $this->session->userdata("usuario_id");
+	    	$this->db->where($where);
+	    }
+		
+		if($tipo == ''){
+			$tipo = 'documentos';
+		}
+		
+		$c1[] = $this->documento_m->get_columns();
+		$c2[] = $this->cuentas_m->get_columns();
+		$c3[] = $this->mandantes_m->get_columns();
+		$c4[] = $this->etapas_m->get_columns();
+		$c5[] = $this->usuarios_m->get_columns();
+		
+		$c = array_merge($c1, $c2,$c3,$c4,$c5);
+		foreach ($c as $campo) {
+			foreach ($campo as $dato) {
+				$cols[] = $dato;
+			}
+		}
+		
+		
+		$this->db->select($cols);
+		$this->db->from('documento doc');
+		$this->db->join('s_etapas e', 'e.id = doc.id_etapa');
+		$this->db->join('0_cuentas c', 'c.id = doc.idcuenta');
+		$this->db->join('0_mandantes m', 'm.id = c.id_mandante');
+		$this->db->join('0_usuarios u', 'u.id = c.id_usuario');
+		
+		$this->db->order_by('iddocumento', 'DESC');
+		$query = $this->db->get();
+		$this->data['documentos'] = $query->result();
+		
+		/*echo '<pre>';
+		print_r( $this->data['documentos'] );
+		echo '</pre>';*/
+		
+		
+		$this->db->select($cols);
+		$this->db->from('documento doc');
+		$this->db->join('0_cuentas c', 'c.id = doc.idcuenta');
+		$this->db->join('0_mandantes m', 'm.id = c.id_mandante');
+		$this->db->join('s_etapas e', 'e.id = doc.id_etapa');
+		$this->db->join('0_usuarios u', 'u.id = c.id_usuario');
+		$this->db->order_by('iddocumento', 'DESC');
+		$this->db->group_by('doc.archivo_zip');
+		$query = $this->db->get();
+		$this->data['documentos_zip'] = $query->result();
+		
+		
+		//$this->load->view ( 'backend/templates/doc/table_doc_all', $this->data );
+		$this->data['tipo']			= $tipo;
+		$this->data['plantilla']	= 'doc/table_doc_all';
+		$this->load->view ( 'backend/index', $this->data );
+	}
+	
+	public function delete($iddocumento=''){
+		$error = '';
+		$exito = TRUE;
+		$doc = $this->documento_m->get_by(array('iddocumento'=>$iddocumento));
+		if(count($doc)>0){
+			$archivo = $doc->nombre_documento;
+			
+			if( file_exists( './documentos/'.$archivo ) ) {
+				if( unlink( './documentos/'.$archivo ) ){
+					$this->documento_m->delete_by(array('iddocumento'=>$iddocumento));
+				}else{
+					$exito = false;
+					$error = 'Doc. no se puedo borrar.';
+				}
+			}
+		}
+		
+		if( $exito ){
+			echo '{"status":"exito","contenido":""}';
+		}else{
+			echo '{"status":"error","contenido":"'.$error.'"}';
+		}
+	}
+	
+	
+	
+	public function zip(){
+		
+		$zip = new ZipArchive();
+		$filename = './documentos_zip/test112.zip';
+		
+		if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) {
+		    exit("cannot open <$filename>\n");
+		}
+		
+		//$zip->addFromString('./documentos_base/demanda_ejecutiva_pagare_falabella.docx' . time(), "#1 Esto es una cadena de prueba añadida como  testfilephp.txt.\n");
+		//$zip->addFromString("testfilephp2.txt" . time(), "#2 Esto es una cadena de prueba añadida como testfilephp2.txt.\n");
+		$zip->addFile('./documentos_base/demanda_ejecutiva_pagare_falabella.docx','demanda_ejecutiva_pagare_falabella.docx');
+		echo "numficheros: " . $zip->numFiles . "\n";
+		echo "estado:" . $zip->status . "\n";
+		$zip->close();
+		
+	}
+	
+	
+	
+}
+
+?>

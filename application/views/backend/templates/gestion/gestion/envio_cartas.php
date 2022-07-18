@@ -1,0 +1,1 @@
+<?php $this->load->view('backend/templates/gestion/gestion/envio_cartas_list');?>
