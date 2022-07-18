@@ -64,23 +64,13 @@ class Cuentas extends CI_Controller {
 		$this->data['plantilla'] = 'cuentas/';
 		$this->data['lists'] = array();
 		
-		$this->data['estados_cuenta'] = array();
-		$a=$this->estados_cuenta_m->get_all();
-		$this->data['estados_cuenta'][-1]='Seleccionar';
-		foreach ($a as $obj) {$this->data['estados_cuenta'][$obj->id] = $obj->estado;}
-		$this->data['forma_pagos'] = array(''=>'Forma Pago','TF'=>'Transferencia','DP'=>'DepÃ³sito','CH'=>'Cheque','EF'=>'Efectivo');
+	
 		
-		
-		
-		$c=$this->estados_cuenta_m->order_by('estado','ASC')->get_all(); 
-		$this->data['estados'][-1]='Seleccionar..';
-	 	foreach ($c as $obj) {$this->data['estados'][$obj->id] = $obj->estado;}
+	
 	 	
 		$this->data['nodo'] = $this->nodo = $this->nodo_m->get_by( array('activo'=>'S') );
 		
-		$r=$this->cuentas_m->get_many_by(array('activo'=>'S','rol !='=>''));
-	    $this->data['roles']['']='Seleccionar..';
-	 	foreach ($r as $obj) {$this->data['roles'][$obj->rol] = $obj->rol;}
+		
 		
 	 	$rep=$this->receptor_m->order_by('nombre','ASC')->get_all(); 
 		$this->data['receptores'][-1]='Seleccionar..';
@@ -153,10 +143,7 @@ class Cuentas extends CI_Controller {
 							$sistema = $value->sistema;
 						$where['sistema'] = $sistema;
 					}
-					if($value->estado){
-						$param = 1;
-						$where['estado'] = $value->estado;
-					}
+			
 					if($value->id_gestor){
 						$param = 1;
 						//$where['cta.id_marcas_especiales'] = $value->id_gestor;
@@ -194,31 +181,8 @@ class Cuentas extends CI_Controller {
 						if(!$param){
 							$where_str = "(rut IS NULL OR rut = '')";
 						}
-						$query = $this->db->select('cta.id AS id,
-													cta.id_abogado,
-													cta.rol AS rol,
-													cta.tribunal AS tribunal,
-													cta.fecha_ingreso AS fecha_ingreso,
-													cta.caratulado AS caratulado,
-													cta.rut,
-													cta.fecha_etapa,
-													cta.etapa as etapa_cuenta,
-													cta.nombres as procurador,
-													cta.estado,
-													cta.mandante,
-													cta.causa_reservada,
-													mc.id as id_mov,
-													mc.etapa, 
-													mc.tramite,
-													mc.descripcion,
-													mc.fecha,
-													mc.url,
-													cta.id AS id_na,
-													cta.rit,
-													cta.ruc,
-													cta.rol_interno,
-													cta.rol_unico,
-													cta.tipo_causa,
+						$query = $this->db->select('cta.id AS id
+													
 												')
 												->from("0_cuentas_n_a cta")
 												->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta_na", 'left')
@@ -236,30 +200,8 @@ class Cuentas extends CI_Controller {
 							$this->db->join("tribunales_pjud pjud", "pjud.id_tribunal_pjud = cta.id_tribunal", "left");
 							$this->db->join("s_tribunales trib", "trib.id = pjud.id_s_tribunales", "left");
 						}
-						$query = $this->db->select('cta.id AS id,
-													cta.id_abogado,
-													cta.rol AS rol,
-													cta.tribunal AS tribunal,
-													cta.fecha_ingreso AS fecha_ingreso,
-													cta.caratulado AS caratulado,
-													cta.rut,
-													cta.fecha_etapa,
-													cta.etapa as etapa_cuenta,
-													cta.nombres as procurador,
-													cta.estado,
-													cta.mandante,
-													cta.causa_reservada,
-													mc.id as id_mov,
-													mc.etapa, 
-													mc.tramite,
-													mc.descripcion,
-													mc.fecha,
-													mc.url,
-													cta.rit,
-													cta.ruc,
-													cta.rol_interno,
-													cta.rol_unico,
-													cta.tipo_causa,
+						$query = $this->db->select('cta.id AS id
+													
 												')
 												->from("0_cuentas cta")
 												->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta", 'left')
@@ -275,31 +217,8 @@ class Cuentas extends CI_Controller {
 							$this->db->join("s_tribunales trib", "trib.id = pjud.id_s_tribunales", "left");
 						}
 						unset($where['cta.id_marcas_especiales']);
-						$query = $this->db->select('cta.id AS id,
-													cta.id_abogado,
-													cta.rol AS rol,
-													cta.tribunal AS tribunal,
-													cta.fecha_ingreso AS fecha_ingreso,
-													cta.caratulado AS caratulado,
-													cta.rut,
-													cta.fecha_etapa,
-													cta.etapa as etapa_cuenta,
-													cta.nombres as procurador,
-													cta.estado,
-													cta.mandante,
-													cta.causa_reservada,
-													mc.id as id_mov,
-													mc.etapa, 
-													mc.tramite,
-													mc.descripcion,
-													mc.fecha,
-													mc.url,
-													cta.id AS id_na,
-													cta.rit,
-													cta.ruc,
-													cta.rol_interno,
-													cta.rol_unico,
-													cta.tipo_causa,
+						$query = $this->db->select('cta.id AS id
+													
 												')
 												->from("0_cuentas_n_a cta")
 												->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta_na", 'left')
@@ -337,24 +256,8 @@ class Cuentas extends CI_Controller {
 					
 				}
 				
-				$query = $this->db->select('cta.id AS id,
-													cta.id_abogado,
-													cta.rol AS rol,
-													cta.tribunal AS tribunal,
-													cta.fecha_ingreso AS fecha_ingreso,
-													cta.caratulado AS caratulado,
-													cta.rut,
-													cta.fecha_etapa,
-													cta.etapa as etapa_cuenta,
-													cta.nombres as procurador,
-													cta.estado,
-													cta.mandante,
-													cta.causa_reservada,
-													cta.rit,
-													cta.ruc,
-													cta.rol_interno,
-													cta.rol_unico,
-													cta.tipo_causa,
+				$query = $this->db->select('cta.id AS id													
+												
 												')
 												->from("0_cuentas cta")
 												//->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta_na", 'left')
@@ -366,24 +269,8 @@ class Cuentas extends CI_Controller {
 
 				$res2 = $query->result();
 				
-				$query = $this->db->select('cta.id AS id,
-													cta.id_abogado,
-													cta.rol AS rol,
-													cta.tribunal AS tribunal,
-													cta.fecha_ingreso AS fecha_ingreso,
-													cta.caratulado AS caratulado,
-													cta.rut,
-													cta.fecha_etapa,
-													cta.etapa as etapa_cuenta,
-													cta.nombres as procurador,
-													cta.estado,
-													cta.mandante,
-													cta.causa_reservada,
-													cta.rit,
-													cta.ruc,
-													cta.rol_interno,
-													cta.rol_unico,
-													cta.tipo_causa,
+				$query = $this->db->select('cta.id AS id
+												
 												')
 												->from("0_cuentas_n_a cta")
 												//->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta_na", 'left')
@@ -406,31 +293,7 @@ class Cuentas extends CI_Controller {
 				else
 					$cuentas[$value->id_procurador.'-'.$value->grupo][] = $result;
 
-				if($value->sistema != 'apel'){
-					foreach($result as $k => $val){
-						$idabog = $val->id_abogado;
-						$datos_abog = array();
-						$abogad = $this->abogados_m->get_by(array("id" => $idabog));
-						$datos_abog['distribuidos'] = intval($abogad->distribuidos) + 1;
-						$this->abogados_m->update($idabog, $datos_abog, false, true);
-
-						$data = array();
-						$data['seleccionado'] = 1;
-						if($value->sistema == 'na'){
-							$this->cuentas_na->update($val->id, $data, false, true);
-						}
-					}
-					foreach ($res1 as $k => $v) {
-						$data = array();
-						$data['seleccionado'] = 1;
-						$this->cuentas_na->update($v->id, $data, false, true);
-					}
-					foreach ($res2 as $k => $v) {
-						$data = array();
-						$data['seleccionado'] = 1;
-						$this->cuentas_m->update($v->id, $data, false, true);
-					}
-				}
+				
 			}
 		}
 		$this->enviar_correo($cuentas);
@@ -1031,7 +894,7 @@ class Cuentas extends CI_Controller {
 			$fields_save = array();
 
 			//if (isset($_POST['id_mandante'])){ $fields_save['id_mandante']=$_POST['id_mandante'];}
-			if (isset($_POST['id_abogado'])){ $fields_save['id_abogado']=$_POST['id_abogado'];}
+		
 			//if (isset($_POST['id_tipo_producto'])){ $fields_save['id_tipo_producto']=$_POST['id_tipo_producto'];}
 			//if (isset($_POST['n_pagare'])){ $fields_save['n_pagare']=$_POST['n_pagare'];}
 			//if (isset($_POST['monto_deuda'])){ $fields_save['monto_deuda']=$_POST['monto_deuda'];}
@@ -1485,12 +1348,7 @@ class Cuentas extends CI_Controller {
 		}	
 
 
-		$this->data['abogados'] = array();
-		if (!empty($this->data['lists']->id_abogado) && $this->data['lists']->id_abogado!='0'){
-			$this->db->where(array('activo' => $this->activo, 'public' => $this->activo, 'id' => $this->data['lists']->id_abogado));
-			$a=$this->abogados_m->where("activo", 'S')->get_all();
-			foreach ($a as $obj) {$this->data['abogados'][$obj->id] = $obj->nombres.' '.$obj->ape_pat;}
-		}	
+		
 
 
 		$this->data['distritos'] = array();
@@ -1903,11 +1761,7 @@ class Cuentas extends CI_Controller {
 				$config['suffix'].= 'id_procurador='.$_REQUEST['id_procurador'];
 			}}
 
-			if (isset($_REQUEST['id_abogado'])){if ($_REQUEST['id_abogado']>0){ 
-				$where["cta.id_abogado"] = $_REQUEST['id_abogado'];
-				if ($config['suffix']!=''){ $config['suffix'].='&';}
-				$config['suffix'].= 'id_abogado='.$_REQUEST['id_abogado'];
-			}}
+	
 			
 			if ($config['suffix']!=''){$config['suffix']='?'.$config['suffix'];}
 			
@@ -2028,27 +1882,9 @@ class Cuentas extends CI_Controller {
 			###########################################################################
 
 			$this->db->select('
-				cta.id AS id,
-				cta.rol AS rol,
-				cta.tribunal AS tribunal,
-				cta.fecha_ingreso AS fecha_ingreso,
-				cta.caratulado AS caratulado,
-				cta.rut,
-				cta.fecha_etapa,
-				cta.etapa as etapa_cuenta,
-				cta.nombres as procurador,
-				cta.estado,
-				cta.mandante,
-				cta.cruce_pjud,
-				cta.fecha_crea,
-				abo.nombres AS nombres,
-				mc.etapa, 
-				mc.tramite,
-				mc.descripcion,
-				mc.fecha,
-				mc.url,
+				cta.id AS id
 				');
-			$this->db->join("abogado abo", "abo.id = cta.id_abogado");
+		
 			$this->db->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta", 'left');
 			
 			$this->db->where($where);
@@ -2065,29 +1901,9 @@ class Cuentas extends CI_Controller {
 			// N_A
 
 			$this->db->select('
-				cta.id,
-				cta.id AS id_na,
-				cta.rol AS rol,
-				cta.tribunal AS tribunal,
-				cta.fecha_ingreso AS fecha_ingreso,
-				cta.caratulado AS caratulado,
-				cta.rut,
-				cta.fecha_etapa,
-				cta.etapa as etapa_cuenta,
-				cta.nombres as procurador,
-				cta.estado,
-				cta.mandante,
-				cta.revisar,
-				cta.cruce_pjud,
-				cta.fecha_crea,
-				abo.nombres AS nombres,
-				mc.etapa, 
-				mc.tramite,
-				mc.descripcion,
-				mc.fecha,
-				mc.url,
+				cta.id
 				');
-			$this->db->join("abogado abo", "abo.id = cta.id_abogado");
+	
 			$this->db->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta_na", 'left');
 			
 			$this->db->where($where);
@@ -2100,14 +1916,8 @@ class Cuentas extends CI_Controller {
 			$list2 = $query->result(); //print_r($list2); die;
 			
 			//$sists = array('X', 'cat', 'cae', 'sup');
-			$abogados = $this->abogados_m->get_all();
-			foreach($abogados as $k => $v){
-				//$abogad = $this->abogados_m->get_by(array("id" => $i));
-				//$ctas_m = $this->cuentas_m->get_many_by(array('sistema'=>$sists[$i]));
-				$ctas_m = $this->cuentas_m->get_many_by(array('id_abogado' => $v->id));
-				//$ctas_na = $this->cuentas_na->get_many_by(array('id_abogado'=>$i));
-				$netos[] = count($ctas_m);
-			}
+		
+
 			
 			$this->data['abogados'] = $abogados;
 			$this->data['netos'] = $netos;
@@ -2148,148 +1958,7 @@ class Cuentas extends CI_Controller {
 				$this->data['causas_no_enviada'] = $envios[0]->causas_no_enviada;
 			}
 			
-			//Contar los cruces
-			$this->db->select('count(*) as cant');
-			$this->db->where(array('cruce_pjud'=>1));
-			$query =  $this->db->get('0_cuentas cta');
-			$cant1 = $query->result();
-			$cruces = intval($cant1[0]->cant);
-			$this->data['cruces'] = $cruces;
-
-			//Contar las reservadas
-			$this->db->select('count(*) as cant');
-			$this->db->where(array('causa_reservada'=>1));
-			$query =  $this->db->get('0_cuentas cta');
-			$cant1 = $query->result();
-
-			$this->db->select('count(*) as cant');
-			$this->db->where(array('causa_reservada'=>1));
-			$query =  $this->db->get('0_cuentas_n_a cta');
-			$cant2 = $query->result();
-			$reservadas = intval($cant1[0]->cant) + intval($cant2[0]->cant);
-			$this->data['reservadas'] = $reservadas;
 			
-			################# ROLES #######################
-			//Contar los totales de C y E
-			$this->db->select('SUM(total_registros) as cant1, SUM(total_registros_E) as cant2, 
-							   SUM(total_match) as cant3, SUM(total_match_E) as cant4,
-							   SUM(total_na) as cant5, SUM(total_na_E) as cant6');
-			$query  = $this->db->get('sistemas');
-			$result = $query->result();
-			
-			$total = intval($result[0]->cant1) + intval($result[0]->cant2);
-			$tpjud = intval($result[0]->cant3) + intval($result[0]->cant4);
-			$totna = intval($result[0]->cant5) + intval($result[0]->cant6);
-			
-			$this->data['rol_tot'] = $total;
-			$this->data['rol_pjud'] = $tpjud;
-			$this->data['rol_na'] = $totna;
-
-			$this->data['corte'] = $this->data['apelaciones'] = $this->data['laboral'] = $this->data['penal'] = $this->data['cobranza'] = 0;
-			############### Contar tipos ######################
-			$this->db->select('count(*) as cant_apel');
-			$this->db->where(array('sistema'=>'apel'));
-			$query =  $this->db->get('0_cuentas');
-			$apel = $query->result();
-			$apelaciones = intval($apel[0]->cant_apel);
-			$this->data['apelaciones'] = $apelaciones;
-			
-			$this->db->select('count(*) as cant_corte');
-			$this->db->where(array('sistema'=>'supr'));
-			$query =  $this->db->get('0_cuentas');
-			$corte = $query->result();
-			$corte = intval($corte[0]->cant_corte);
-			$this->data['corte'] = $corte;
-			
-			$this->db->select('count(*) as cant_laboral');
-			$this->db->where(array('sistema'=>'laboral'));
-			$query =  $this->db->get('0_cuentas');
-			$laboral = $query->result();
-			$laboral = intval($laboral[0]->cant_laboral);
-			$this->data['laboral'] = $laboral;
-			
-			$this->db->select('count(*) as cant_penal');
-			$this->db->where(array('sistema'=>'penal'));
-			$query =  $this->db->get('0_cuentas');
-			$penal = $query->result();
-			$penal = intval($penal[0]->cant_penal);
-			$this->data['penal'] = $penal;
-			
-			$this->db->select('count(*) as cant_cobranza');
-			$this->db->where(array('sistema'=>'cobranza'));
-			$query =  $this->db->get('0_cuentas');
-			$cobranza = $query->result();
-			$cobranza = intval($cobranza[0]->cant_cobranza);
-			$this->data['cobranza'] = $cobranza;
-			
-			############### Contar devueltos ######################
-			$this->db->select('count(*) as devueltos');
-			$this->db->where(array('estado'=>'Devuelto'));
-			$query =  $this->db->get('0_cuentas');
-			$devueltos = $query->result();
-			$devueltos = intval($devueltos[0]->devueltos);
-			$this->data['devueltos'] = $devueltos;
-			
-			############### CONTAR NO SELECCIONADOS ######################
-			$this->db->select('count(*) as seleccionado_0');
-			$this->db->where(array('seleccionado'=>0));
-			$query =  $this->db->get('0_cuentas cta');
-			$cant1 = $query->result();
-
-			$this->db->select('count(*) as seleccionado_0');
-			$this->db->where(array('seleccionado'=>0));
-			$query =  $this->db->get('0_cuentas_n_a cta');
-			$cant2 = $query->result();
-			$seleccionado = intval($cant1[0]->seleccionado_0) + intval($cant2[0]->seleccionado_0);
-			$this->data['seleccionado'] = $seleccionado;
-
-
-			######## Contar correos ################
-			$this->db->select('
-				rc.enviados as enviados, 
-				rc.no_enviados as no_enviados, 
-				rc.causas_no_enviada as causas_no_enviada,
-				rc.causa_enviada as causa_enviada');
-			$query =  $this->db->get('reg_correo rc');
-			$reg = $query->result();
-			$enviados = intval($reg[0]->enviados);
-			$no_enviados = intval($reg[0]->no_enviados);
-			$causas_no_enviada = intval($reg[0]->causas_no_enviada);
-			$causa_enviada = intval($reg[0]->causa_enviada);
-			$this->data['enviados'] = $enviados;
-			$this->data['no_enviados'] = $no_enviados;
-			$this->data['causas_no_enviada'] = $causas_no_enviada;
-			$this->data['causa_enviada'] = $causa_enviada;
-
-
-
-			//Contar los no seleccionados
-			$this->db->select('count(*) as cant');
-			$this->db->where(array('seleccionado'=>0));
-			$query =  $this->db->get('0_cuentas cta');
-			$cant1 = $query->result();
-
-			$this->db->select('count(*) as cant');
-			$this->db->where(array('seleccionado'=>0));
-			$query =  $this->db->get('0_cuentas_n_a cta');
-			$cant2 = $query->result();
-			$no_seleccionados = intval($cant1[0]->cant) + intval($cant2[0]->cant);
-			$this->data['no_seleccionados'] = $no_seleccionados; //echo $cruces.'-->'.$no_seleccionados; die;
-		
-			$this->db->start_cache();
-			$this->db->stop_cache();
-			
-			$this->data['lists'] = array_merge($list1, $list2); //print_r($this->data['lists']); die;
-			
-			$this->data['total'] = $config['total_rows'];
-			
-			$this->db->where(array('activo' => $this->activo, 'public' => $this->activo));
-			$a=$this->administradores_m->get_all();
-			$this->data['procuradores'][0]='Seleccionar';
-			foreach ($a as $obj) {$this->data['procuradores'][$obj->id] = $obj->nombres.' '.$obj->apellidos;}
-			$this->data['mandantes'][0]='Seleccionar';
-			$a=$this->mandantes_m->get_many_by(array('activo'=>'S'));
-			foreach ($a as $obj) {$this->data['mandantes'][$obj->id] = $obj->codigo_mandante;}
 
 			if (!$this->show_tpl){ 
 				$this->data['plantilla'] = 'cuentas/list_tabla'; 
@@ -2324,24 +1993,7 @@ class Cuentas extends CI_Controller {
 		$sheet->SetCellValue ( 'K1', 'ESTADO' );
 		$sheet->SetCellValue ( 'L1', 'MANDANTE' );
 
-		$query = $this->db->select('cta.id AS id,
-									cta.id_abogado,
-									cta.rol AS rol,
-									cta.sistema,
-									cta.tribunal AS tribunal,
-									cta.fecha_ingreso AS fecha_ingreso,
-									cta.caratulado AS caratulado,
-									cta.rut,
-									cta.fecha_etapa,
-									cta.etapa as etapa_cuenta,
-									cta.nombres as procurador,
-									cta.estado,
-									cta.mandante,
-									mc.etapa, 
-									mc.tramite,
-									mc.descripcion,
-									mc.fecha,
-									mc.url,
+		$query = $this->db->select('cta.id AS id
 								')
 								->from("0_cuentas_n_a cta")
 								->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta_na", 'left')
@@ -2349,26 +2001,8 @@ class Cuentas extends CI_Controller {
 								->get();
 		$res1 = $query->result();
 
-		$query = $this->db->select('cta.id AS id,
-									cta.id_abogado,
-									cta.rol AS rol,
-									cta.rit AS rit,
-									cta.rol_interno,
-									cta.sistema,
-									cta.tribunal AS tribunal,
-									cta.fecha_ingreso AS fecha_ingreso,
-									cta.caratulado AS caratulado,
-									cta.rut,
-									cta.fecha_etapa,
-									cta.etapa as etapa_cuenta,
-									cta.nombres as procurador,
-									cta.estado,
-									cta.mandante,
-									mc.etapa, 
-									mc.tramite,
-									mc.descripcion,
-									mc.fecha,
-									mc.url,
+		$query = $this->db->select('cta.id AS id
+									
 								')
 								->from("0_cuentas cta")
 								->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta", 'left')
@@ -2662,7 +2296,6 @@ class Cuentas extends CI_Controller {
 				cta.posicion AS posicion, ".
 				"    cta.publico AS publico,
 				cta.monto_deuda AS monto_deuda,
-				cta.rol AS rol,
 				estado.estado AS estado,
 				etapas.etapa AS etapa, ".
 				"    mand.razon_social,
@@ -3000,7 +2633,7 @@ class Cuentas extends CI_Controller {
 				$like["gastos.fecha"] = date("Y-m");*/
 			
 			
-			$query_master =$this->db->select('cta.id AS id,mand.clase_html AS clase_html,mand.codigo_mandante AS codigo_mandante,cta.activo AS activo,pagos.forma_pago AS forma_pago,r.nombre AS nombre_recep,r.rut AS rut_r, cta.publico AS publico,cta.posicion AS posicion, usr.rut AS rut,usr.nombres AS nombre_deudor,usr.ap_pat AS apellido_paterno,usr.ap_mat AS apellido_materno,tr.tribunal AS tribunal,tr.id AS id_tribunal, cta.rol AS rol, adm.nombres AS nombres, adm.apellidos AS apellidos, mand.razon_social, gastos.fecha AS fecha, gastos.n_boleta AS n_boleta,gastos.fecha_ingreso_banco AS fecha_ingreso_banco,gastos.fecha_recepcion AS fecha_recepcion, gastos.rut_receptor AS rut_receptor, gastos.nombre_receptor AS nombre_receptor, gastos.monto AS monto, gastos.retencion AS retencion, gastos.descripcion AS descripcion, cta.id_mandante AS field_categoria')
+			$query_master =$this->db->select('cta.id')
 								 ->join("0_usuarios usr", "usr.id = cta.id_usuario")
 								 ->join("0_mandantes mand", "mand.id = cta.id_mandante")
 								 ->join("0_administradores adm", "adm.id = cta.id_procurador","left")
@@ -3144,7 +2777,7 @@ class Cuentas extends CI_Controller {
 				$this->db->limit($config['per_page'],$this->data['current_pag']);
 			}
 			$this->db->where($where);
-			$query_master =$this->db->select('cta.monto_deuda as monto_deuda,trib_com.tribunal as tribunal_padre_comuna,cta.monto_pagado_new as monto_pagado_new, cta.fecha_ultimo_pago as fecha_ultimo_pago,pagare.fecha_asignacion as fecha_pagare,cta.id AS id,SUM(pag2.monto_remitido) AS total,estado.estado AS estado,etapas.etapa AS etapa , pag.fecha_pago AS fecha_pago,cta.monto_deuda AS monto_deuda,cta.id_mandante AS id_mandante,mand.codigo_mandante AS codigo_mandante,cta.fecha_asignacion AS fecha_asignacion, cta.id AS id, cta.activo AS activo, cta.publico AS publico, cta.posicion AS posicion, usr.rut AS rut,mand.clase_html AS clase_html, cta.rol AS rol, adm.nombres AS nombres, adm.apellidos AS apellidos, mand.razon_social, etapas.etapa AS etapa, usr.nombres AS usr_nombres, usr.ap_pat AS usr_ap_pat, usr.ap_mat AS usr_ap_mat, usr.direccion AS direccion, usr.direccion_numero AS direccion_numero, usr.direccion_dpto AS direccion_dpto, usr.ciudad AS ciudad, comu.nombre AS comuna, estado.estado AS estado, estado.id AS id_estado_cuenta, cta.id_mandante AS field_categoria')
+			$query_master =$this->db->select('cta.id')
 								 ->join("0_usuarios usr", "usr.id = cta.id_usuario AND usr.activo='S' AND cta.activo='S'")
 								 ->join("0_mandantes mand", "mand.id = cta.id_mandante")
 								 ->join("0_administradores adm", "adm.id = cta.id_procurador","left")
@@ -3318,349 +2951,7 @@ class Cuentas extends CI_Controller {
 		die();
 	}
 	
-	function cruce_pjud2(){
-		session_start();
-		set_time_limit(0);
-		$apiurl = "http://192.168.1.184:3000/api/estado_diario/obtener_estado";
-		
-		$abogados = $this->abogados_m->get_all();
-		
-		$fecha_viernes = $fecha_sabado = '';
-		$fecha_ayer = date("d/m/Y", strtotime('-1 day'));
-		$fecha_ayer_letras = date('D', strtotime('-1 day'));
-		if($fecha_ayer_letras == "Sun" || $fecha_ayer_letras == "Dom"){
-			$fecha_ayer = '';
-			$fecha_viernes = date("d/m/Y", strtotime('-3 day'));
-			$fecha_sabado = date("d/m/Y", strtotime('-2 day'));
-		}
-		
-		$fechas = array($fecha_ayer, $fecha_viernes, $fecha_sabado);
-		foreach($fechas as $fecha_act){
-			if($fecha_act){
-				foreach($abogados as $a => $abog){
-					$consulta = $this->consulta_pjud_m->get_by(array('id_abogado' => $abog->id, 'fecha' => (string)$fecha_act));
-					if($abog->usuario == '17342843' && !$consulta){ // == '17342843'
-					    //echo $abog->id; die;
-						$total_registros = $registros = 0;
-						$id_abogado = $abog->id;
-						$data = array(
-							'usuario' => $abog->usuario,
-							'password' => $abog->password,
-							//'fecha' => "18/03/2021"
-							'fecha' => $fecha_act
-						);
-						
-						//print_r($data); die;				
-						
-						$arrayjson = json_encode($data);
-						
-						$curl = curl_init();
 
-						curl_setopt_array($curl, array(
-							CURLOPT_URL => $apiurl,
-							CURLOPT_RETURNTRANSFER => true,
-							CURLOPT_ENCODING => '',
-							CURLOPT_MAXREDIRS => 10,
-							CURLOPT_TIMEOUT => 0,
-							CURLOPT_FOLLOWLOCATION => true,
-							CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-							CURLOPT_CUSTOMREQUEST => 'POST',
-							CURLOPT_POSTFIELDS => $arrayjson,
-							CURLOPT_HTTPHEADER => array(
-								'Content-Type: application/json'
-							),
-						));
-
-						$json = curl_exec($curl);
-						
-						if($json == false || curl_errno($curl)){
-							echo json_encode(array('result' => 0, 'curl' => curl_error($curl),
-												   'error' => 'Error de conexion con el PJUD, intentelo mas tarde'));
-							die();
-						}
-						
-						curl_close($curl);
-						 
-						$result = json_decode($json);
-							
-						echo "id_abogado: ".$id_abogado;
-						print_r($result); die;
-						if($result && $result->status == 200){
-							foreach($result->data as $k => $v){
-								
-								if($v->tab == 'corteSuprema'){
-									if(!empty($v->data)){
-										$total_registros += count($v->data);
-										foreach($v->data as $sup => $supr){
-											
-										}
-									}
-								}
-								elseif($v->tab == 'corteApelaciones'){
-									if(!empty($v->data)){
-										$total_registros += count($v->data);
-										foreach($v->data as $ape => $apel){
-											//print_r($apel); die;
-											
-											$datos_cuentas = array();
-											$datos_cuentas['rol'] = $rol;
-											$datos_cuentas['fecha_ingreso'] = $fecha_ingreso;
-											$datos_cuentas['ubicacion'] = $ubicacion;
-											$datos_cuentas['fecha_ubica'] = $fecha_ubica;
-											$datos_cuentas['tribunal'] = $corte;
-											$datos_cuentas['caratulado'] = $caratulado;
-											$datos_cuentas['sistema'] = 'apel';
-											if($rol)
-												$this->cuentas_m->save_default($datos_cuentas);
-										}
-									}
-								}
-								elseif($v->tab == 'civil'){
-									if(!empty($v->data)){
-										$total_registros += count($v->data);
-										foreach($v->data as $civ => $civil){
-											$x = 0;
-											$fechaingreso = '';
-											$rol = $civil->causa;
-											$tribunal = $civil->tribunal;
-											$caratulado = $civil->caratualdo;
-											if($civil->fechaCausa){
-												$fecha = split('/', $civil->fechaCausa);
-												$fecha = $fecha[0].'-'.$fecha[1].'-'.$fecha[2];
-												$fechaingreso = date("Y-m-d", strtotime($fecha));
-											}
-											$datos_cuentas = array();
-											$datos_cuentas['rol'] = $rol;
-											$datos_cuentas['cruce_pjud'] = 1;
-											$datos_cuentas['id_abogado'] = $id_abogado;
-											$datos_cuentas['tribunal'] = $tribunal;
-											$datos_cuentas['caratulado'] = $caratulado;
-											if($fechaingreso)
-												$datos_cuentas['fecha_ingreso'] = $fechaingreso;
-											//print_r($datos_cuentas); die;
-											if($rol)
-												$data_res = $this->revisar_cuentas2($datos_cuentas);
-											if($data_res && $data_res['tipo'] && $data_res['idcuenta']){
-												$registros++;
-												foreach($civil->data as $scua => $cuaderno){
-													$tipo_cuaderno = $cuaderno->opcion;
-													foreach($cuaderno->data as $tab => $tabs){
-														if($tabs->tab == 'historiaCiv' && is_array($tabs->data)){
-															foreach($tabs->data as $d => $data){
-																//print_r($data); die;
-																$url = $data[1][0];
-																//$data[$rol][$x]['url'] = $data[2];
-																$etapa = $data[3];
-																$tramite = $data[4];
-																$descripcion = $data[5];
-																$fecha = $data[6];
-																if($fecha){
-																	$f = explode('/', $fecha);
-																	$fecha = $f[2].'-'.$f[1].'-'.$f[0];
-																}
-																
-																$data_save = array();
-																if($data_res['tipo'] == 1)
-																	$data_save['id_cuenta_na'] = $data_res['idcuenta'];
-																else
-																	$data_save['id_cuenta'] = $data_res['idcuenta'];
-																
-																$url_base = "https://oficinajudicialvirtual.pjud.cl/";
-																$data_save['url'] = $url_base.$url;
-																$data_save['etapa'] = $etapa;
-																$data_save['tramite'] = $tramite;
-																$data_save['descripcion'] = $descripcion;
-																$data_save['cuaderno'] = $tipo_cuaderno;
-																$data_save['fecha'] = Date('Y-m-d', strtotime($fecha));
-																//print_r($data_save); die;
-																if($etapa)
-																	$id_mov = $this->movimiento_cuenta->insert($data_save, false, true);
-															}
-														}
-														elseif($tabs->tab == 'litigantesCiv' && is_array($tabs->data)){
-															$rut = '';
-															foreach($tabs->data as $d => $data){
-																$part = $data[0];
-																if($part == 'DDO.' || $part == 'DDOR.'){
-																	$rut = $data[1];
-																	break;
-																}
-															}
-															//ACTUALIZAR CUENTA_NA POR EL RUT DE CLIENTE
-															if($rut != '' && $data_res['tipo'] == 1){
-																$sistema = '';
-																$this->cae = $this->load->database("cae", TRUE);
-																$this->cat = $this->load->database("cat", TRUE);
-																$this->sup = $this->load->database("superir", TRUE);
-
-																//Consultar la base de datos del CAE
-																$result1 = $this->cae->select('
-																							u.rut,
-																							MAX(2ce.fecha_etapa) as fecha_etapa,
-																							se.etapa,
-																							ma.codigo_mandante as mandante,
-																							es.estado,
-																							adm.nombres,
-																							adm.apellidos,
-																							2cd.id_comuna,
-																						')
-																					  ->from("0_cuentas cta")
-																					  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-																					  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-																					  ->join("2_cuentas_direccion 2cd", "2cd.id_cuenta = cta.id","left")
-																					  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-																					  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-																					  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-																					  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-																					  ->where("u.rut like '$rut%' and es.estado != 'Devuelto'")
-																					  ->get()
-																					  ->result();
-
-																if($result1 && $result1[0]->rut != '')
-																	$sistema = 'cae';
-
-																//Consultar la base de datos del CAT
-																$result2 = $this->cat->select('
-																							u.rut,
-																							MAX(2ce.fecha_etapa) as fecha_etapa,
-																							se.etapa,
-																							ma.codigo_mandante as mandante,
-																							es.estado,
-																							adm.nombres,
-																							adm.apellidos,
-																							2cd.id_comuna,
-																							cta.id_marcas_especiales
-																						')
-																					  ->from("0_cuentas cta")
-																					  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-																					  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-																					  ->join("2_cuentas_direccion 2cd", "2cd.id_cuenta = cta.id","left")
-																					  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-																					  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-																					  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-																					  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-																					  ->where("u.rut like '$rut%' and es.estado != 'Devuelto'")
-																					  ->get()
-																					  ->result();
-
-																if($result2 && $result2[0]->rut != '')
-																	$sistema = 'cat';
-
-																//Consultar la base de datos del SUPERIR
-																$result3 = $this->sup->select('
-																							u.rut,
-																							MAX(2ce.fecha_etapa) as fecha_etapa,
-																							se.etapa,
-																							ma.codigo_mandante as mandante,
-																							es.estado,
-																							adm.nombres,
-																							adm.apellidos,
-																							2cd.id_comuna,
-																						')
-																					  ->from("0_cuentas cta")
-																					  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-																					  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-																					  ->join("2_cuentas_direccion 2cd", "2cd.id_cuenta = cta.id","left")
-																					  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-																					  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-																					  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-																					  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-																					  ->where("u.rut like '$rut%'")
-																					  ->get()
-																					  ->result();
-
-																if($result3 && $result3[0]->rut != '')
-																	$sistema = 'sup';
-																$result4 = array_merge($result1, $result2, $result3);
-																$result = array();
-																foreach ($result4 as $k => $v){ //print_r($value);
-																	if($v->rut != '')
-																		$result[] = $v;
-																}
-																if(empty($result))
-																	$result = $result1;
-
-																//print_r($result); 
-																if($result){
-																	$find = true;
-																	$datos_cuenta['sistema'] = $sistema;
-																	$datos_cuenta['rut'] = $rut;
-																	$datos_cuenta['etapa'] = $result[0]->etapa;
-																	$datos_cuenta['fecha_etapa'] = $result[0]->fecha_etapa;
-																	$datos_cuenta['mandante'] = $result[0]->mandante;
-																	$datos_cuenta['estado'] = $result[0]->estado;
-																	if($result[0]->id_comuna)
-																		$datos_cuenta['id_comuna'] = $result[0]->id_comuna;
-																	if($result[0]->id_marcas_especiales)
-																		$datos_cuenta['id_marcas_especiales'] = $result[0]->id_marcas_especiales;
-																	$datos_cuenta['nombres'] = trim($result[0]->nombres).' '.trim($result[0]->apellidos);
-																	$datos_cuenta['revisar'] = (count($result) > 1) ? 1 : 0;
-																}
-																$this->cuentas_na->update($data_res['idcuenta'], $datos_cuenta, false, true);
-															} //die;
-															//https://oficinajudicialvirtual.pjud.cl/misCausas/civil/documentos/docuS.php?dtaDoc=...
-														}
-													}
-												}
-											}
-										}
-										//Guardar marca de consulta
-										$data_consulta = array();
-										$data_consulta['id_abogado'] = $abog->id;
-										$data_consulta['fecha'] = (string)$fecha_act;
-										$this->consulta_pjud_m->insert($data_consulta, false, true);
-									}
-									else{ //DATA VIENE VACIA, VOLVER A INTENTAR
-										echo json_encode(array('result' => 0,
-															   'error' => 'Respuesta vacía del PJUD, intentelo nuevamente'));
-										die();
-									}
-								}
-							}
-						}
-						elseif($result && $result->status != 200){
-							$msg = ($result->msg) ? $result->msg : $result->message;
-							echo json_encode(array('result' => 0,
-												   'error' => $msg));
-							die();
-						}
-						
-						if($total_registros){
-							$today = date('Y-m-d');
-							$abogados = $this->abogados_m->get_all();
-							foreach($abogados as $k => $v){
-								$ctas_m = $this->cuentas_m->get_many_by(array('id_abogado'=>$v->id));
-								$ctas_na = $this->cuentas_na->get_many_by(array('id_abogado'=>$v->id));
-								$datos_abog = array();
-								if($v->id == $id_abogado){
-									$datos_abog['total_registros'] = $v->total_registros + $total_registros;
-									$datos_abog['total_registros_archivo'] = $v->total_registros + $total_registros;
-									$datos_abog['total_import'] = count($ctas_m) + count($ctas_na);
-									$datos_abog['total_na'] = count($ctas_na);
-									//$datos_abog['total_elim'] = intval($this->array_return['elimin']);
-								}
-								if($v->total_import){
-									$datos_abog['total_elim'] = $v->total_registros - count($ctas_m) - count($ctas_na);
-									$datos_abog['total_import'] = count($ctas_m) + count($ctas_na);
-									$datos_abog['total_na'] = count($ctas_na);
-								}
-								/*
-								if($i == 3){
-									echo '-->'..'--->'.count($ctas_m).'--->'.count($ctas_na);
-								print_r($datos_abog); die;}*/
-								if(!empty($datos_abog)){
-									$datos_abog['fecha_gestion'] = $today;
-									$this->abogados_m->update($v->id, $datos_abog, false, true);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-        echo json_encode(array('result' => 1));
-		die();
-	}
 	
 	public function revisar_cuentas2($datos=array()){
 		$passed = false;
@@ -3683,9 +2974,7 @@ class Cuentas extends CI_Controller {
 			$datos_cuentas ['fecha_ingreso'] = $datos ['fecha_ingreso'];
 		}
 
-		if (array_key_exists('id_abogado', $datos) && $datos['id_abogado'] != '') {
-           $datos_cuentas['id_abogado'] = $datos['id_abogado'];
-		}
+	
 		
 		if (array_key_exists('cruce_pjud', $datos) && $datos['cruce_pjud'] != '') {
            $datos_cuentas['cruce_pjud'] = $datos['cruce_pjud'];
@@ -3713,305 +3002,8 @@ class Cuentas extends CI_Controller {
 			$datos_cuentas = array_merge($datos_cuentas, array('fecha_crea' => date ( 'Y-m-d H:i:s' ), 'id_tribunal' => $id_tribunal));
 
 			$where = array();
-			$rol = explode('-', $datos_cuentas['rol']);
-			
-			$id_abogado = $datos_cuentas['id_abogado'];
-			$abogad = $this->abogados_m->get_by(array("id" => $id_abogado));
-			if($abogad){
-				$sist = strtolower(substr($abogad->sistema, 0, 3));
-				if(!empty($res)){
-					$this->cae = $this->load->database("cae", TRUE);
-					$this->cat = $this->load->database("cat", TRUE);
-					$this->sup = $this->load->database("superir", TRUE);
-
-					if($rol[0] == 'C'){
-						$where['cta.letraC'] = 1;
-						$a = $this->cae->select("*")->from('anio a')->where("anio", $rol[2])->get()->result();
-						if(!empty($a))
-							$where['cta.anio'] = $a[0]->id;
-						if($rol[1])
-							$where['cta.rol'] = $rol[1];
-						$where['cta.id_tribunal'] = $res->id_s_tribunales;
-					}
-					elseif($rol[0] == 'E'){
-						$where['cta.letraE'] = 2;
-						$a = $this->cae->select("*")->from('anio a')->where("anio", $rol[2])->get()->result();
-						if(!empty($a))
-							$where['cta.anioE'] = $a[0]->id;
-						if($rol[1])
-							$where['cta.rolE'] = $rol[1];
-						$where['cta.id_tribunal_ex'] = $res->id_s_tribunales;
-					}
-
-					$sistema = '';
-					//Consultar la base de datos del CAE
-					$result1 = $this->cae->select('
-												u.rut,
-												MAX(2ce.fecha_etapa) as fecha_etapa,
-												se.etapa,
-												ma.codigo_mandante as mandante,
-												es.estado,
-												adm.nombres,
-												adm.apellidos,
-												2cd.id_comuna,
-											')
-										  ->from("0_cuentas cta")
-										  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-										  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-										  ->join("2_cuentas_direccion 2cd", "2cd.id_cuenta = cta.id","left")
-										  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-										  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-										  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-										  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-										  ->where($where)
-										  ->get()
-										  ->result();
-
-					if($result1 && $result1[0]->rut != '')
-						$sistema = 'cae';
-
-					if($rol[0] == 'C'){
-						$where['cta.letraC'] = 1;
-						$a = $this->cat->select("*")->from('anio a')->where("anio", $rol[2])->get()->result();
-						if(!empty($a))
-							$where['cta.anio'] = $a[0]->id;
-						if($rol[1])
-							$where['cta.rol'] = $rol[1];
-						$where['cta.id_tribunal'] = $res->id_s_tribunales;
-					}
-					elseif($rol[0] == 'E'){
-						$where['cta.letraE'] = 2;
-						$a = $this->cat->select("*")->from('anio a')->where("anio", $rol[2])->get()->result();
-						if(!empty($a))
-							$where['cta.anioE'] = $a[0]->id;
-						if($rol[1])
-							$where['cta.rolE'] = $rol[1];
-						$where['cta.id_tribunal_ex'] = $res->id_s_tribunales;
-					}
-
-					$result2 = $this->cat->select('
-												u.rut,
-												MAX(2ce.fecha_etapa) as fecha_etapa,
-												se.etapa,
-												ma.codigo_mandante as mandante,
-												es.estado,
-												adm.nombres,
-												adm.apellidos,
-												2cd.id_comuna,
-												cta.id_marcas_especiales
-											')
-										  ->from("0_cuentas cta")
-										  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-										  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-										  ->join("2_cuentas_direccion 2cd", "2cd.id_cuenta = cta.id","left")
-										  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-										  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-										  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-										  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-										  ->where($where)
-										  ->get()
-										  ->result();
-
-					if($result2 && $result2[0]->rut != '')
-						$sistema = 'cat';
-
-					if($rol[0] == 'C'){
-						$where['cta.letraC'] = 1;
-						$a = $this->sup->select("*")->from('anio a')->where("anio", $rol[2])->get()->result();
-						if(!empty($a))
-							$where['cta.anio'] = $a[0]->id;
-						if($rol[1])
-							$where['cta.rol'] = $rol[1];
-						$where['cta.id_tribunal'] = $res->id_s_tribunales;
-					}
-					elseif($rol[0] == 'E'){
-						$where['cta.letraE'] = 2;
-						$a = $this->sup->select("*")->from('anio a')->where("anio", $rol[2])->get()->result();
-						if(!empty($a))
-							$where['cta.anioE'] = $a[0]->id;
-						if($rol[1])
-							$where['cta.rolE'] = $rol[1];
-						$where['cta.id_tribunal_ex'] = $res->id_s_tribunales;
-					}
-
-					$result3 = $this->sup->select('
-												u.rut,
-												MAX(2ce.fecha_etapa) as fecha_etapa,
-												se.etapa,
-												ma.codigo_mandante as mandante,
-												es.estado,
-												adm.nombres,
-												adm.apellidos,
-												2cd.id_comuna,
-											')
-										  ->from("0_cuentas cta")
-										  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-										  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-										  ->join("2_cuentas_direccion 2cd", "2cd.id_cuenta = cta.id","left")
-										  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-										  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-										  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-										  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-										  ->where($where)
-										  ->get()
-										  ->result();
-
-					if($result3 && $result3[0]->rut != '')
-						$sistema = 'sup';
-
-					$result4 = array_merge($result1, $result2, $result3);
-					$result = array();
-					foreach ($result4 as $key => $value){ //print_r($value);
-						if($value->rut != '')
-							$result[] = $value;
-					}
-					if(empty($result))
-						$result = $result1;
-
-					$aux_rol = $datos_cuentas['rol'];
-					$aux_trb = $datos_cuentas['id_tribunal'];
-					$cuenta = $this->cuentas_m->get_by(array("rol" => $aux_rol, 'id_tribunal' => $aux_trb));
-					$cuenta_na = $this->cuentas_na->get_by(array("rol" => $aux_rol, 'id_tribunal' => $aux_trb));
-					
-					$tipo = 0;
-					if($result[0]->rut == ''){ //ESTO ES UN N/A
-						$tipo = 1;
-						$datos_cuentas['id_comuna'] = $result[0]->id_comuna;
-						if($result[0]->id_marcas_especiales)
-							$datos_cuentas['id_marcas_especiales'] = $result[0]->id_marcas_especiales;
-						if($id_abogado == 1){ //CINTHYA
-							$idcuenta = $this->cuentas_aux->save_default($datos_cuentas);
-							$this->array_return['no_insert']++;
-						}
-						elseif(!$cuenta_na){
-							$datos_cuentas['sistema'] = $sist;
-							$idcuenta = $this->cuentas_na->save_default($datos_cuentas);
-							$this->array_return['cuentas_insert']++;
-						}
-						elseif($cuenta_na){
-							// 2 -> cat, 3 -> cae, 4 -> superir
-							if($sist == 'cat' && $sist_aux == 'sup'){ //CAROLINA e ISIS (Eliminamos a carolina) OK
-								$datos_cuentas['sistema'] = 'cat';
-								$this->cuentas_na->delete($cuenta_na->id);
-								$this->array_return['elimin']++;
-							}
-							elseif($sist == 'cat' && $sist_aux == 'cae'){ //ISIS y LESLIE (No insertamos a isis)
-								$passed = true;
-								$idcuenta = $cuenta_na->id;
-							}
-							elseif($sist == 'cae' && $sist_aux == 'cat'){ //LESLIE e Isis (Quitamos a isis)
-								$datos_cuentas['sistema'] = $sist;
-								$this->cuentas_na->delete($cuenta_na->id);
-								$this->array_return['elimin']++;
-							}
-							elseif($sist == 'cae' && $sist_aux == 'sup'){ //LESLIE y CAROLINA (Eliminamos a carolina) OK
-								$datos_cuentas['sistema'] = $sist;
-								$this->cuentas_na->delete($cuenta_na->id);
-								$this->array_return['elimin']++;
-							}
-							elseif($sist == 'sup' && in_array($sist_aux, array('cat', 'cae'))){//CAROLINA (No insertamos a karolina) OK
-								$passed = true;
-								$idcuenta = $cuenta_na->id;
-							}
-							if(!$passed){
-								if($sistema)
-									$datos_cuentas['sistema'] = $sistema;
-								$idcuenta = $this->cuentas_na->save_default($datos_cuentas);
-								$this->array_return['cuentas_insert']++;
-							}
-							else
-								$this->array_return['no_insert']++;	
-						}
-					}
-					else{ //CUENTAS NORMAL
-						$tipo = 2;
-						$abogad_aux = $this->abogados_m->get_by(array("id" => $id_abogado));
-						if($abogad_aux){
-							$idabog = $abogad_aux->id;
-							$datos_abog = array();
-							$datos_abog['cruce_gespron'] = intval($abogad_aux->cruce_gespron) + 1;
-							$this->abogados_m->update($idabog, $datos_abog, false, true);
-						}
-
-						$datos_cuentas['rut'] = $result[0]->rut;
-						$datos_cuentas['etapa'] = $result[0]->etapa;
-						$datos_cuentas['fecha_etapa'] = $result[0]->fecha_etapa;
-						$datos_cuentas['mandante'] = $result[0]->mandante;
-						$datos_cuentas['estado'] = $result[0]->estado;
-						$datos_cuentas['id_comuna'] = $result[0]->id_comuna;
-						if($result[0]->apellidos)
-							$datos_cuentas['nombres'] = trim($result[0]->nombres).' '.trim($result[0]->apellidos);
-						else
-							$datos_cuentas['nombres'] = trim($result[0]->nombres);
-						if($result[0]->id_marcas_especiales)
-							$datos_cuentas['id_marcas_especiales'] = $result[0]->id_marcas_especiales;
-						if($id_abogado == 1){ //CINTHYA
-							$passed = false;
-							if($cuenta){
-								if(in_array($cuenta->id_abogado, array('cat', 'cae', 'sup'))){ //(No se inserta)
-									$passed = true;
-									$idcuenta = $cuenta->id;
-								}
-							}
-							if(!$passed){
-								$datos_cuentas['sistema'] = $sistema;
-								$idcuenta = $this->cuentas_m->save_default($datos_cuentas);
-								$this->array_return['cuentas_insert']++;
-							}
-							else
-								$this->array_return['no_insert']++;
-						}
-						else{
-							$passed = false;
-							if($cuenta){
-								if($sist == 'cat' && $cuenta->id_abogado == 1){ //ISIS (Quitamos a Cinthya)
-									$this->cuentas_m->delete($cuenta->id);
-									$this->array_return['elimin']++;
-								}
-								elseif($sist == 'cat' && $sist_aux == 'cae'){ //ISIS y LESLIE (No insertamos a isis)
-									$passed = true;
-									$idcuenta = $cuenta->id;
-								}
-								elseif($sist == 'cat' && $sist_aux == 'sup'){ //ISIS y CAROLINA (Eliminar a Carolina)
-									$this->cuentas_m->delete($cuenta->id);
-									$this->array_return['elimin']++;
-								}
-								elseif($sist == 'cae' && $cuenta->id_abogado == 1){ //LESLIE (Quitamos a cinthya)
-									$this->cuentas_m->delete($cuenta->id);
-									$this->array_return['elimin']++;
-								}
-								elseif($sist == 'cae' && $sist_aux == 'cat'){ //LESLIE e Isis (Quitamos a isis)
-									$this->cuentas_m->delete($cuenta->id);
-									$this->array_return['elimin']++;
-								}
-								elseif($sist == 'cae' && $sist_aux == 'sup'){ //LESLIE y Carolina (Eliminar a Carolina)
-									$this->cuentas_m->delete($cuenta->id);
-									$this->array_return['elimin']++;
-								}
-								elseif($sist == 'sup' && $cuenta->id_abogado == 1){ //Carolina (Quitamos a Cinthya)
-									$this->cuentas_m->delete($cuenta->id);
-								}
-								elseif($sist == 'sup' && in_array($cuenta->id_abogado, array('cat', 'cae'))){ //CAROLINA (No insertamos)
-									$this->cuentas_m->delete($cuenta->id);
-									$this->array_return['elimin']++;
-								}
-							}
-							if(!$passed && $result[0]->rut != ''){
-								$datos_cuentas['sistema'] = $sistema;
-								$idcuenta = $this->cuentas_m->save_default($datos_cuentas);
-								$this->array_return['cuentas_insert']++;
-							}
-							else
-								$this->array_return['no_insert']++;	
-						}
-					}
-				}
-				else{ // NO TIENE TRIBUNAL
-					$tipo = 1;
-					$idcuenta = $this->cuentas_na->save_default($datos_cuentas);
-					$this->array_return['cuentas_insert']++;
-				}
-			}
+	
+	
 			$data_res['tipo'] = $tipo;
 			$data_res['idcuenta'] = $idcuenta;
 			return $data_res;
@@ -4019,641 +3011,10 @@ class Cuentas extends CI_Controller {
 		return false;
 	}
 
-	function cruce_pjud(){
-		set_time_limit(0);
-        //lIMPIAR TABLA DE MOVIMIENTOS
-        //$this->movimiento_cuenta->delete_all();
-		$count = $_POST['contador'];
-		$this->db->select('
-			cta.id AS id,
-			cta.id_abogado,
-			cta.rol AS rol,
-			cta.id_tribunal
-			');
-		//$this->db->where("sistema = 'sup'"); //superir, quitar luego
-		$this->db->where("cruce_pjud = 0 and causa_reservada = 0 and (rol like 'C-%' or rol like 'E-%')");
-		$this->db->group_by("cta.id");
-		$query = $this->db->get('0_cuentas cta');
-		$data1 = $query->result();
 
-		$this->pjud($data1, 1, $count);
 
-		$this->db->select('
-			cta.id AS id,
-			cta.id_abogado,
-			cta.rol AS rol,
-			cta.id_tribunal
-			');
-		//$this->db->where("sistema = 'sup'"); //superir, quitar luego
-		$this->db->where("cruce_pjud = 0 and causa_reservada = 0 and (rol like 'C-%' or rol like 'E-%')");
-		$this->db->group_by("cta.id");
-		$query = $this->db->get('0_cuentas_n_a cta');
-		$data2 = $query->result(); //print_r($data2); die('sss');
 
-		$this->pjud($data2, 2, $count);
-		
-		//$this->index();
-		//$abogados = $this->abogados_m->get_all();
-		//Calcular los valores totales de cruces y total de causas reservadas en cuentas y cuentas n_a
-		$total_c = $total_na = 0;
-		/*$this->db->select('cta.id');
-		$this->db->where("cruce_pjud = 0 and causa_reservada = 0 and (rol like 'C-%' or rol like 'E-%')");
-		$this->db->group_by("cta.id");
-		$query = $this->db->get('0_cuentas cta');
-		$total_c = count($query->result());
-		
-		$this->db->select('cta.id');
-		$this->db->where("cruce_pjud = 0 and causa_reservada = 0 and (rol like 'C-%' or rol like 'E-%')");
-		$this->db->group_by("cta.id");
-		$query = $this->db->get('0_cuentas_n_a cta');
-		$total_na = count($query->result());*/
-		echo json_encode(array('result' => 1, 'totalc' => $total_c, 'totalna' => $total_na));
-		die();
-	}
 
-	function getURL($url){
-		$arr_idc = array();
-		$curl = curl_init();
-		$aux = $url;
-		$url .= "TIP_Cuaderno=1&";
-		curl_setopt($curl, CURLOPT_HEADER, FALSE);
-		curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($curl, CURLOPT_COOKIESESSION, TRUE);
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_POST, true);
-		// print_r($url);
-		//die;
-		$results = curl_exec($curl);
-		//echo "--->".$url; die; 
-		if($results == false || curl_errno($curl) || strpos($results, '500 Internal Server Error') !== false){
-			//echo 'Curl error: ' . curl_error($curl);
-			//print_r($value->rol);
-			echo json_encode(array('result' => 0, 'curl' => curl_error($curl),
-								   'error' => 'Error de conexion con el PJUD, intentelo mas tarde'));
-			curl_close($curl);
-			die();
-		}
-		elseif(strpos($results, 'Causa Reservada.') !== false){
-			return false;
-		}
-		else{
-			libxml_use_internal_errors(true);
-			libxml_clear_errors();
-			$this->dom = new DOMDocument();
-			$this->dom->loadHTML($results);
-			
-			$xpath = new DOMXPath($this->dom);
-			$idCuaderno = $xpath->query("//select/option");
-			
-			foreach($idCuaderno as $node){
-				$arr_idc[] = $node->getAttribute('value');
-			}
-			curl_close($curl);
-			
-			if(empty($arr_idc)){
-				$curl = curl_init();
-				$url  = $aux."TIP_Cuaderno=86&"; //Solo para los casos que no tengan al menos el cuaderno principal
-				curl_setopt($curl, CURLOPT_HEADER, FALSE);
-				curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-				curl_setopt($curl, CURLOPT_COOKIESESSION, TRUE);
-				curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_POST, true);
-				// print_r($url);
-				//die;
-				$results = curl_exec($curl);
-				//echo "--->".$results; die; 
-				if($results == false || curl_errno($curl) || strpos($results, '500 Internal Server Error') !== false){
-					//echo 'Curl error: ' . curl_error($curl);
-					//print_r($value->rol);
-					echo json_encode(array('result' => 0, 'curl' => curl_error($curl),
-										   'error' => 'Error de conexion con el PJUD, intentelo mas tarde'));
-					die();
-				}
-				else{
-					libxml_use_internal_errors(true);
-					libxml_clear_errors();
-					$this->dom = new DOMDocument();
-					$this->dom->loadHTML($results);
-					
-					$xpath = new DOMXPath($this->dom);
-					$idCuaderno = $xpath->query("//select/option");
-					
-					foreach($idCuaderno as $node){
-						$arr_idc[] = $node->getAttribute('value');
-					}
-				}
-				curl_close($curl);
-			}
-		}
-		
-		return $arr_idc;
-	}
-	
-	function pjud($data, $opt, $cant){
-		$url = "https://civil.pjud.cl/CIVILPORWEB/ConsultaDetalleAtPublicoAccion.do?TIP_Consulta=1&";
-		//define('USER_AGENT', 'Mozilla / 5.0 (Windows NT 5.1) AppleWebKit / 537.36 (KHTML, como Gecko) Chrome / 35.0.2309.372 Safari / 537.36');
-        //define('COOKIE_FILE', 'cookie.txt');
-        $count = 0;
-		//print_r ($data); die;
-		foreach ($data as $key => $value){
-			$tiene_mov = $reservada = $letra = 0;
-			$etapa = $tramite = $descripcion = $fecha = '';
-			$rol = $value->rol; 
-			$rol = explode('-', $rol);
-			$buscar_receptor = 1;
-			if($rol[0] == "C"){
-				$letra = 1;
-				//Consultar en ROLES por el lado de C
-				$this->db->select('cta.id AS id, cruce_pjud, cruce_pjud_E,tiene_mov, tiene_mov_E, letraE,rolE, anioE, id_tribunal_ex');
-				$this->db->where("letraC = '{$rol[0]}' and rol = '{$rol[1]}' and anio = '{$rol[2]}' and id_tribunal = {$value->id_tribunal}");
-				$query = $this->db->get('roles_0_cuentas cta');
-				$data1 = $query->result();
-				if(!empty($data1)){
-					if($data1[0]->cruce_pjud == 1){
-						//Ver si tiene receptor
-						$receptor = $this->receptor_roles->get_by(array("id_cuenta"=>$data1[0]->id));
-						if($receptor){
-							$data_receptor = array();
-							$data_receptor["id_cuenta"] = $value->id;
-							$this->receptor_roles->update($receptor->id, $data_receptor, false, true);
-						}
-					}
-					else
-						$buscar_receptor = 1;
-					if(($data1[0]->cruce_pjud_E == 1 && $data1[0]->tiene_mov_E == 0) || ($data1[0]->letraE == '' && $data1[0]->rolE == '' && $data1[0]->anioE == ''))
-						$this->roles_m->delete_by(array("id"=>$data1[0]->id));
-				}
-			}
-			elseif($rol[0] == "E"){
-				$letra = 1;
-				//Consultar en ROLES por el lado de E
-				$this->db->select('cta.id AS id, cruce_pjud_E');
-				$this->db->where("letraE = '{$rol[0]}' and rolE = '{$rol[1]}' and anioE = '{$rol[2]}' and id_tribunal_ex = {$value->id_tribunal}");
-				$query = $this->db->get('roles_0_cuentas cta');
-				$data1 = $query->result();
-				if(!empty($data1)){
-					if($data1[0]->cruce_pjud_E == 1){
-						$receptor = $this->receptor_roles->get_by(array("id_cuenta"=>$data1[0]->id));
-						if($receptor){
-							$data_receptor = array();
-							$data_receptor["id_cuenta"] = $value->id;
-							$this->receptor_roles->update($receptor->id, $data_receptor, false, true);
-						}
-					}
-					else
-						$buscar_receptor = true;
-					$this->roles_m->delete_by(array("id"=>$data1[0]->id));
-				}
-			}
-			//echo "-->".$letra; die;
-			if($letra){
-				$aux = $url;
-				$url = $url.'ROL_Causa='.$rol[1].'&TIP_Causa='.$rol[0].'&ERA_Causa='.$rol[2].'&COD_Tribunal='.$value->id_tribunal.'&TIP_Informe=1&';
-				$ext = 'ROL_Causa='.$rol[1].'&TIP_Causa='.$rol[0].'&ERA_Causa='.$rol[2].'&COD_Tribunal='.$value->id_tribunal.'&TIP_Informe=1&';
-				$arr_idc = array();
-				$arr_idc = $this->getURL($url);
-				$all = $act = 0;
-				if($arr_idc){
-					//print_r($arr_idc); die;
-					$count_cuadernos = count($arr_idc);
-					foreach($arr_idc as $idc){
-						$idt = 1; //Principal
-						$results = false;
-						if(is_numeric($idc)){
-							if(in_array($idc, array("29148726", "32799974", "32867169", "32998731", "32982076", 
-													"32617274", "31986178", "29905063", "29781780", "28364228",
-													"32467025", "30673151")))
-								$idt = 116; //Concursal
-							elseif(in_array($idc, array("32715383", "32989560", "33228131", "33181954", "33073181", 
-														"33008743", "32873856", "32711842", "32494745", "32582326",
-														"30173801", "30651075", "31380644")))
-								$idt = 19; // Apremio o Apremio Ejecutivo Obligacion de Dar
-							elseif($idc == "32952812")
-								$idt = 101; // Incidente Abandono del Proc
-							elseif($idc == "32888313")
-								$idt = 104; // Incidente Desistimiento de la Dda
-							elseif($idc == "32586681")
-								$idt = 113; // Incidente Genera
-							elseif($idc == "26247856")
-								$idt = 49; // Gestión preparatoria
-							elseif($idc == "27507964")
-								$idt = 86; // Concursal de Liquidación Voluntaria - Empresa Deudora
-								
-							$url_tmp = $url."TIP_Cuaderno={$idt}&CRR_IdCuaderno={$idc}&";
-							
-							//echo $url_tmp; 
-							
-							$curl = curl_init();
-							curl_setopt($curl, CURLOPT_HEADER, FALSE);
-							curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-							curl_setopt($curl, CURLOPT_COOKIESESSION, TRUE);
-							curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
-							curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-							curl_setopt($curl, CURLOPT_URL, $url_tmp);
-							curl_setopt($curl, CURLOPT_POST, true);
-
-							$results = curl_exec($curl);
-							//echo "--->".$result; die;
-							if($results == false || curl_errno($curl) || strpos($results, '500 Internal Server Error') !== false){
-								//echo 'Curl error: ' . curl_error($curl);
-								//print_r($value->rol);
-								echo json_encode(array('result' => 0, 'curl' => curl_error($curl),
-													   'error' => 'Error de conexion con el PJUD, intentelo mas tarde'));
-								die();
-							}
-							curl_close($curl);
-						}
-
-						if (!$results || strpos($results, 'Cannot find bean under name') !== false){
-							$reservada = 1;
-							$all++;
-							if($count_cuadernos == $all){
-								if($opt==1){
-									//ACTUALIZO CRUCE PJUD EN CUENTA
-									$datos_cuenta = array();
-									$datos_cuenta['causa_reservada'] = 1;
-									$this->cuentas_m->update($value->id, $datos_cuenta, false, true);
-								}
-								else{ //die('eee');
-									$datos_cuenta = array();
-									$datos_cuenta['causa_reservada'] = 1;
-									$this->cuentas_na->update($value->id, $datos_cuenta, false, true);
-								}
-							}
-							//echo "-->".$value->id;
-						}
-						else{
-							libxml_use_internal_errors(true);
-							libxml_clear_errors();
-							$this->dom = new DOMDocument();
-							$this->dom->loadHTML($results);
-							
-							if($opt==2){
-								$curl = curl_init();
-								curl_setopt($curl, CURLOPT_HEADER, FALSE);
-								curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-								curl_setopt($curl, CURLOPT_COOKIESESSION, TRUE);
-								curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
-								curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-								curl_setopt($curl, CURLOPT_URL, $url_tmp);
-								curl_setopt($curl, CURLOPT_POST, true);
-								//curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($postValues));
-
-								$results = curl_exec($curl);
-
-								if($results == false || curl_errno($curl) || strpos($results, '500 Internal Server Error') !== false){
-									//echo 'Curl error: ' . curl_error($curl);
-									//print_r($value->rol);
-									echo json_encode(array('result' => 0, 'curl' => curl_error($curl),
-														   'error' => 'Error de conexion con el PJUD, intentelo mas tarde'));
-									die();
-								}
-								curl_close($curl); //echo $results; die;
-
-								libxml_use_internal_errors(true);
-								libxml_clear_errors();
-								$this->na_dom = new DOMDocument();
-								$this->na_dom->loadHTML($results);
-								$this->na_dom->preserveWhiteSpace = false;
-								$div = $this->na_dom->getElementById('Litigantes');
-								//print_r($div); die; 
-								if($div){
-									$tables = $div->getElementsByTagName('table');
-									$rows = $tables->item(1)->getElementsByTagName('tr');
-									$rut = '';
-									foreach ($rows as $row){
-										$cols = $row->getElementsByTagName('td');
-										$part = trim($cols->item(0)->nodeValue);
-										if($part == 'DDO.' || $part == 'DDOR.'){
-											$rut = trim($cols->item(1)->nodeValue);
-											break;
-										}
-									}
-								}
-								//echo '-->'.$rut;
-							}
-							
-							$this->dom->preserveWhiteSpace = false;
-							$div1 = $this->dom->getElementById('Historia');
-							if($buscar_receptor)
-								$div2 = $this->dom->getElementById('ReceptorDIV');
-							if($div1){
-								$tables = $div1->getElementsByTagName('table');
-								$rows = $tables->item(1)->getElementsByTagName('tr');
-								$fecha_ayer = $fecha_viernes = $fecha_sabado = "";
-								$fecha_ayer_letras = date('D', strtotime('-1 day'));
-								if($fecha_ayer_letras == "Sun" || $fecha_ayer_letras == "Dom"){
-									$fecha_viernes = date('Y-m-d', strtotime('-3 day'));
-									$fecha_sabado = date('Y-m-d', strtotime('-2 day'));
-								}
-								if($fecha_viernes)
-									$fecha_ayer = $fecha_viernes;
-								else
-									$fecha_ayer = date('Y-m-d', strtotime('-1 day'));
-								$fecha_ant = $fecha_ayer;
-								//$fecha_ant = "2020-08-14";
-								foreach ($rows as $row){
-									$cols = $row->getElementsByTagName('td');
-									$fecha = trim($cols->item(6)->nodeValue);
-									if(strlen($fecha) > 10){
-										$fecha = explode(' ', $fecha);
-										$f = explode('/', $fecha[0]);
-									}
-									else
-										$f = explode('/', $fecha);
-									$fecha = $f[2].'-'.$f[1].'-'.$f[0];
-								
-									if($fecha_ant){
-										//echo $fecha; 
-										//echo $fecha_ant; die;
-										$compara = $this->comparaFechas($fecha, $fecha_ant);
-										if($compara == 'mayor'){
-											$fecha_ant = $fecha;
-											$etapa = trim($cols->item(3)->nodeValue);
-											$tramite = trim($cols->item(4)->nodeValue);
-											$descripcion = trim($cols->item(5)->nodeValue);
-											//URL DOCUMENTO
-											$image = $row->getElementsByTagName('img')->item(0);
-											if($image){
-												$url_doc = trim($image->getAttribute('onclick'), ")'");
-												if($url_doc){
-													//$url_doc = explode("ShowPDFCabecera('", $url_doc);
-													$url_doc = substr($url_doc, 19);
-													$url_doc = 'https://civil.pjud.cl/'.$url_doc;
-												}
-											}
-										}
-										elseif($compara == 'igual'){
-											$tiene_mov = 1;
-											if($etapa == '' || $tramite == '' || $descripcion == ''){
-												$etapa = trim($cols->item(3)->nodeValue);
-												$tramite = trim($cols->item(4)->nodeValue);
-												$descripcion = trim($cols->item(5)->nodeValue);
-												//URL DOCUMENTO
-												$image = $row->getElementsByTagName('img')->item(0);
-												if($image){
-													$url_doc = trim($image->getAttribute('onclick'), ")'");
-													if($url_doc){
-														//$url_doc = explode("ShowPDFCabecera('", $url_doc);
-														$url_doc = substr($url_doc, 19);
-														$url_doc = 'https://civil.pjud.cl/'.$url_doc;
-													}
-												}
-											}
-										}
-										else
-											$fecha = $fecha_ant;
-									}
-									else{
-										$fecha_ant = $fecha;
-										$etapa = trim($cols->item(3)->nodeValue);
-										$tramite = trim($cols->item(4)->nodeValue);
-										$descripcion = trim($cols->item(5)->nodeValue);
-										//URL DOCUMENTO
-										$image = $row->getElementsByTagName('img')->item(0);
-										if($image){
-											$url_doc = trim($image->getAttribute('onclick'), ")'");
-											if($url_doc){
-												//$url_doc = explode("ShowPDFCabecera('", $url_doc);
-												$url_doc = substr($url_doc, 19);
-												$url_doc = 'https://civil.pjud.cl/'.$url_doc;
-											}
-										}
-									}
-								}
-								$id_mov = 0;
-								if($opt==1 && $tiene_mov){
-									$data_save = array();
-									$data_save['id_cuenta'] = $value->id;
-									$data_save['url'] = $url_doc;
-									$data_save['etapa'] = $etapa;
-									$data_save['tramite'] = $tramite;
-									$data_save['descripcion'] = $descripcion;
-									$data_save['cuaderno'] = "Principal";
-									$data_save['fecha'] = Date('Y-m-d', strtotime($fecha));
-									//print_r($data_save); die;
-									$id_mov = $this->movimiento_cuenta->insert($data_save, false, true);
-									//ACTUALIZO CRUCE PJUD EN CUENTA
-									$datos_cuenta = array();
-									$datos_cuenta['cruce_pjud'] = 1;
-									$this->cuentas_m->update($value->id, $datos_cuenta, false, true);
-									//ACTUALIZO CRUCE PJUD EN ABOGADOS
-									if(!$act){
-										$idabog = $value->id_abogado;
-										$datos_abog = array();
-										$abogad = $this->abogados_m->get_by(array("id" => $idabog));
-										$datos_abog['total_match'] = intval($abogad->total_match) + 1;
-										$datos_abog['contador'] = $cant;
-										$this->abogados_m->update($idabog, $datos_abog, false, true);
-										$act = 1;
-									}
-									//echo "-->".$url;
-								}
-								elseif($tiene_mov){
-									$data_save = array();
-									$data_save['id_cuenta_na'] = $value->id;
-									$data_save['url'] = $url_doc;
-									$data_save['etapa'] = $etapa;
-									$data_save['tramite'] = $tramite;
-									$data_save['descripcion'] = $descripcion;
-									$data_save['cuaderno'] = "Principal";
-									$data_save['fecha'] = Date('Y-m-d', strtotime($fecha));
-									//print_r($data_save); die;
-									$id_mov = $this->movimiento_cuenta->insert($data_save, false, true);
-									//ACTUALIZO CRUCE PJUD EN CUENTA
-									$find = false;
-									$datos_cuenta = array();
-									$datos_cuenta['rut'] = $rut;
-									$datos_cuenta['cruce_pjud'] = 1;
-									//ACTUALIZAR CUENTA_NA POR EL RUT DE CLIENTE
-									if($rut != ''){
-										$sistema = '';
-										$this->cae = $this->load->database("cae", TRUE);
-										$this->cat = $this->load->database("cat", TRUE);
-										$this->sup = $this->load->database("superir", TRUE);
-
-										//Consultar la base de datos del CAE
-										$result1 = $this->cae->select('
-																	u.rut,
-																	MAX(2ce.fecha_etapa) as fecha_etapa,
-																	se.etapa,
-																	ma.codigo_mandante as mandante,
-																	es.estado,
-																	adm.nombres,
-																	adm.apellidos,
-																')
-															  ->from("0_cuentas cta")
-															  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-															  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-															  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-															  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-															  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-															  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-															  ->where("u.rut like '$rut%' and es.estado != 'Devuelto'")
-															  ->get()
-															  ->result();
-
-										if($result1 && $result1[0]->rut != '')
-											$sistema = 'cae';
-
-										//Consultar la base de datos del CAT
-										$result2 = $this->cat->select('
-																	u.rut,
-																	MAX(2ce.fecha_etapa) as fecha_etapa,
-																	se.etapa,
-																	ma.codigo_mandante as mandante,
-																	es.estado,
-																	adm.nombres,
-																	adm.apellidos,
-																')
-															  ->from("0_cuentas cta")
-															  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-															  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-															  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-															  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-															  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-															  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-															  ->where("u.rut like '$rut%' and es.estado != 'Devuelto'")
-															  ->get()
-															  ->result();
-
-										if($result2 && $result2[0]->rut != '')
-											$sistema = 'cat';
-
-										//Consultar la base de datos del SUPERIR
-										$result3 = $this->sup->select('
-																	u.rut,
-																	MAX(2ce.fecha_etapa) as fecha_etapa,
-																	se.etapa,
-																	ma.codigo_mandante as mandante,
-																	es.estado,
-																	adm.nombres,
-																	adm.apellidos,
-																')
-															  ->from("0_cuentas cta")
-															  ->join("0_usuarios u","u.id=cta.id_usuario", "left")
-															  ->join("2_cuentas_etapas 2ce","2ce.id_cuenta=cta.id", "left")
-															  ->join("s_etapas se","se.id=cta.id_etapa", "left")
-															  ->join("0_mandantes ma","ma.id=cta.id_mandante", "left")
-															  ->join("s_estado_cuenta es","es.id=cta.id_estado_cuenta", "left")
-															  ->join("0_administradores adm","adm.id=cta.id_procurador", "left")
-															  ->where("u.rut like '$rut%'")
-															  ->get()
-															  ->result();
-
-										if($result3 && $result3[0]->rut != '')
-											$sistema = 'sup';
-										$result4 = array_merge($result1, $result2, $result3);
-										$result = array();
-										foreach ($result4 as $k => $v){ //print_r($value);
-											if($v->rut != '')
-												$result[] = $v;
-										}
-										if(empty($result))
-											$result = $result1;
-
-										//print_r($result); 
-										if($result){
-											$find = true;
-											$datos_cuenta['sistema'] = $sistema;
-											$datos_cuenta['etapa'] = $result[0]->etapa;
-											$datos_cuenta['fecha_etapa'] = $result[0]->fecha_etapa;
-											$datos_cuenta['mandante'] = $result[0]->mandante;
-											$datos_cuenta['estado'] = $result[0]->estado;
-											$datos_cuenta['nombres'] = trim($result[0]->nombres).' '.trim($result[0]->apellidos);
-											$datos_cuenta['revisar'] = (count($result) > 1) ? 1 : 0;
-										}
-									} //die;
-									$this->cuentas_na->update($value->id, $datos_cuenta, false, true);
-									//ACTUALIZO CRUCE PJUD EN ABOGADOS
-									if(!$act){
-										$idabog = $value->id_abogado;
-										$datos_abog = array();
-										$abogad = $this->abogados_m->get_by(array("id" => $idabog));
-										$datos_abog['total_match'] = intval($abogad->total_match) + 1;
-										if($find)
-											$datos_abog['cruce_gespron'] = intval($abogad->cruce_gespron) + 1;
-										$datos_abog['contador'] = $cant;
-										$this->abogados_m->update($idabog, $datos_abog, false, true);
-										$act = 1;
-									}
-								}
-								if($buscar_receptor){
-									//receptor
-									$fecha = '';
-									$fecha_hoy = date('Y-m-d');
-									//$fecha_hoy = "2020-08-06";
-									$tables = $div2->getElementsByTagName('table');
-									$rows = $tables->item(3)->getElementsByTagName('tr');
-									foreach($rows as $row){
-										$part = array();
-										$cols = $row->getElementsByTagName('td');
-										if($cols->length > 1){
-											/*
-											foreach($cols as $node){
-												print_r($node);
-											}*/
-											$date = trim($cols->item(1)->nodeValue);
-											$part = explode('-', $date);
-										}
-										if(count($part) > 0){
-											if($part[1]){
-												$date = trim($part[1]);
-												$date = trim($date, '.');
-												$date = trim($date, " \t\n\r\0\x0B\xC2\xA0");
-												$f = explode('/', $date);
-												if($f){
-													$date = $f[2]."-".$f[1]."-".$f[0];
-													$fecha = date('Y-m-d', strtotime($date));
-												}
-											}
-										}
-										$compara = '';
-										if($fecha)
-											$compara = $this->comparaFechas($fecha, $fecha_hoy);
-										
-										if($compara == 'igual'){
-											$cuaderno = trim($cols->item(0)->nodeValue);
-											$dato_ret = trim($cols->item(1)->nodeValue);
-											$estadore = trim($cols->item(2)->nodeValue);
-											$data_save = array();
-											$data_save['id_cuenta'] = $value->id;
-											$data_save['cuaderno'] = $cuaderno;
-											$data_save['datos_retiro'] = $dato_ret;
-											$data_save['estado'] = $estadore;
-											$this->receptor_roles->insert($data_save, false, true);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				else{
-					//echo "entre";
-					if($opt==1){
-						//ACTUALIZO CRUCE PJUD EN CUENTA
-						$datos_cuenta = array();
-						$datos_cuenta['causa_reservada'] = 1;
-						$this->cuentas_m->update($value->id, $datos_cuenta, false, true);
-					}
-					else{ //die('eee');
-						$datos_cuenta = array();
-						$datos_cuenta['causa_reservada'] = 1;
-						$this->cuentas_na->update($value->id, $datos_cuenta, false, true);
-					}
-				}
-				$url = $aux;
-			}
-		}
-	}
-		
 	function importar_excel_cuentas(){
 		$this->load->helper ( 'excel_reader2' );
 		$array_return = array();
@@ -6803,45 +5164,6 @@ class Cuentas extends CI_Controller {
 		$config ['suffix'] = '';
 		
 		
-		if (isset ( $_REQUEST ['nombre'] ) && $_REQUEST ['nombre'] != '') {
-			
-		}
-		
-		
-		if (isset ( $_REQUEST ['rut_parcial'] ) && $_REQUEST ['rut_parcial'] != '') {
-			$like ['usr.rut'] = $_REQUEST ['rut_parcial'];
-		}
-
-
-
-		
-		
-		if (isset ( $_REQUEST ['rol'] ) && $_REQUEST ['rol'] != '') {
-			$like ['cta.rol'] = $_REQUEST ['rol'];
-		}
-		
-		if (isset ( $_REQUEST ['nombres'] ) && $_REQUEST ['nombres'] != '') {
-			$like ['usr.nombres'] = $_REQUEST ['nombres'];
-		}
-		
-		if (isset ( $_REQUEST ['nombre'] ) && $_REQUEST ['nombre'] != '') {
-			$like ['com.nombre'] = $_REQUEST ['nombre'];
-		}
-		
-		
-		if (isset ( $_REQUEST ['ap_pat'] ) && $_REQUEST ['ap_pat'] != '') {
-			$like ['usr.ap_pat'] = $_REQUEST ['ap_pat'];
-		}
-		if (isset ( $_REQUEST ['id_procurador'] ) && $_REQUEST ['id_procurador'] > 0) {
-			$where ['cta.id_procurador'] = $_REQUEST ['id_procurador'];
-		}
-		if (isset ( $_REQUEST ['id_mandante'] ) && $_REQUEST ['id_mandante'] > 0) {
-			$where ['cta.id_mandante'] = $_REQUEST ['id_mandante'];
-		}
-
-        if (isset ( $_REQUEST ['id_estado_cuenta'] ) && $_REQUEST ['id_estado_cuenta'] > 0) {
-            $where ['cta.id_estado_cuenta'] = $_REQUEST ['id_estado_cuenta'];
-        }
 	
 		if ($order_by==''){
 	    	//$order_by = "id_mandante desc,cta.fecha_asignacion desc";
@@ -9652,7 +7974,7 @@ class Cuentas extends CI_Controller {
         $this->db->select($cols);
         $this->db->join('0_usuarios u', 'u.id = c.id_usuario');
         $this->db->join('0_mandantes m', 'm.id = c.id_mandante');
-        $this->db->join("2_cuentas_pagos cp", "cp.id_cuenta = c.id AND cp.activo='S' AND cp.id = (SELECT id FROM 2_cuentas_pagos psp WHERE psp.id_cuenta=c.id AND psp.activo='S' ORDER BY psp.fecha_pago DESC LIMIT 0,1)","left");
+      
         if ($having!=''){
             $this->db->having($having);
         }
