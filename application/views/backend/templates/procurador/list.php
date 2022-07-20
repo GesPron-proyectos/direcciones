@@ -15,11 +15,11 @@
 <div class="tabla-listado">
     <table class="listado" width="100%">
 		<tr class="menu">
-			<td class="nombre">Nro</td>
-			<td class="nombre">Nombre</td>
-			<td class="apellido">Apellido</td>
-			<td class="rut">RUT</td>
-			<td class="correo">Correo</td>
+			<td class="nombre">RUT</td>
+			<td class="nombre">DV</td>
+			<td class="apellido">CUENTA RUT</td>
+			<td class="rut">DATOS</td>
+			
 			<td width="50" class="herramientas">Herramientas</td>
 		</tr>
 

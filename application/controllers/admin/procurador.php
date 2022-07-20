@@ -86,14 +86,13 @@ class Procurador extends CI_Controller {
 			$config['base_url'] = site_url().'/admin/procurador/index/';
 			
 			$query =$this->db->select('
-								p.id AS id,
-								p.rut AS rut,	
-								p.nombre AS nombre,
-								p.apellido AS apellido, 
-								p.correo AS correo
+								cta.rut AS rut,
+								cta.dv AS dv,
+								cta.cuenta_rut AS cuenta_rut,
+								cta.datos AS datos
 								')	 
-						->where("p.activo","S")
-						->get("procurador p");
+						->where("cta.activo","S")
+						->get("0_cuentas cta");
 			
 			$total_rows = $query->result();
 			
@@ -105,14 +104,13 @@ class Procurador extends CI_Controller {
 			
 			
 			$query =$this->db->select('
-								p.id AS id,
-								p.rut AS rut,	
-								p.nombre AS nombre,
-								p.apellido AS apellido, 
-								p.correo AS correo
+								cta.rut AS rut,
+								cta.dv AS dv,
+								cta.cuenta_rut AS cuenta_rut,
+								cta.datos AS datos
 								')	 
-						->where("p.activo","S")
-						->get("procurador p", $config['per_page'], $this->data['current_pag']);
+						->where("cta.activo","S")
+						->get("0_cuentas cta", $config['per_page'], $this->data['current_pag']);
 			
 			$this->data['lists'] = $query->result();
 			$this->data['total'] = $config['total_rows'];

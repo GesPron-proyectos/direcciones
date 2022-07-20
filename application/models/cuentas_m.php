@@ -119,7 +119,10 @@ class Cuentas_M extends EMP_Model{
 	public function get_cuentas($idcuenta= ''){
 		
 		$cols = array();
-		$cols[] = 'c.id AS id';
+		$cols[] = 'c.rut AS rut';
+		$cols[] = 'c.dv AS dv';
+		$cols[] = 'c.cuenta AS cuenta';
+		$cols[] = 'c.datos AS datos';
 		
 		
 		$this->db->select($cols);

@@ -1882,10 +1882,13 @@ class Cuentas extends CI_Controller {
 			###########################################################################
 
 			$this->db->select('
-				cta.id AS id
+				cta.rut AS rut,
+				cta.dv AS dv,
+				cta.cuenta_rut AS cuenta_rut,
+				cta.datos AS datos
 				');
 		
-			$this->db->join("movimiento_cuenta mc", "cta.id = mc.id_cuenta", 'left');
+			
 			
 			$this->db->where($where);
 
