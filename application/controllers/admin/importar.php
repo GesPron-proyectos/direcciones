@@ -13,7 +13,7 @@ class Importar extends CI_Controller {
 		$this->load->helper ( 'excel_reader2' );
 		$this->load->model ( 'nodo_m' );
 		$this->load->model ( 'receptor_m' );
-		$this->load->model ( 'direcciones_m' );
+	//	$this->load->model ( 'direcciones_m' );
 		$this->load->model ( 'procurador_m');
 		
 
