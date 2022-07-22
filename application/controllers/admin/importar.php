@@ -498,7 +498,7 @@ class Importar extends CI_Controller {
 		//$this->load->helper ( 'excel_reader2' );
 		$array_return = array ();
 	
-		$this->data ['operacion'] = FALSE;
+		$this->data ['rut'] = FALSE;
 		
 		$rows_insert = array();
 		
@@ -521,10 +521,10 @@ class Importar extends CI_Controller {
 
 
 		for($i = 2; $i <= $rowcount; $i++) {
-			$rut = trim($sheet->getCellByColumnAndRow('A'. $i)->getValue());
-			$dv = trim ( $sheet->getCellByColumnAndRow('B'. $i)->getValue());
-			$cuenta_rut = trim ( $sheet->getCellByColumnAndRow('C'. $i)->getValue());
-			$datos = trim ( $sheet->getCellByColumnAndRow('D'. $i)->getValue());
+			$rut = trim($sheet->getCell('A'. $i)->getValue());
+			$dv = trim ( $sheet->getCell('B'. $i)->getValue());
+			$cuenta_rut = trim ( $sheet->getCell('C'. $i)->getValue());
+			$datos = trim ( $sheet->getCell('D'. $i)->getValue());
 		
 			
 			$direcciones = array(
