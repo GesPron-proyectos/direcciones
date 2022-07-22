@@ -6,35 +6,20 @@ class Mandantes_M extends EMP_Model{
 		parent::__construct();
 		$this->_table = '0_cuentas';
 		$this->primary_key = 'id';
-		$this->field_posicion = 'posicion';
-		$this->alias = 'cta';
-	
+		$this->field_posicion = 'rut';
+		$this->alias = 'm';
+		$this->field_categoria = '';
 	
 	}
-	
-	public function list_mandante(){
-		
-	   	$this->db->from ( "0_cuentas cta" );
-
-	    $cols = array();
-		$cols [] = 'cta.id AS id';
-		$cols [] = 'cta.nombres AS nombres';
-		$cols [] = 'cta.mandante AS mandante';
-		$cols [] = 'cta.estado AS estado';
-	
-		$this->db->where ( array ('cta.activo' => 'S' ) );
-
-		//$this->db->distinct();
-		$this->db->select($cols);
-				
-   		$this->db->order_by ( 'cta.mandante ASC');
-   		$this->db->group_by('cta.mandante');
-		$query = $this->db->get();
-		return $query->result();	
+	public function setup_validate(){
+		$this->validate = array(
+               array(
+                     'field'   => 'rut',
+                     'label'   => 'Ruts',
+                     'rules'   => 'trim|required'
+                  ),
+               
+            );
 	}
-
-
-
-
 }
 ?>

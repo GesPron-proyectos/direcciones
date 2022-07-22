@@ -1,15 +1,20 @@
 <?php
 include_once "./application/core/EMP_Encrypt.php";
+require_once 'application/libraries/PHPExcel.php';
 
 class Importar extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
 		$this->load->library ( 'session' );
-		$this->load->helper ( 'date_html_helper' );
+		$this->load->library('PHPExcel');
 		$this->load->library ( 'form_validation' );
+		$this->load->helper ( 'date_html_helper' );
+		$this->load->helper ( 'excel_reader2' );
 		$this->load->model ( 'nodo_m' );
 		$this->load->model ( 'receptor_m' );
+		$this->load->model ( 'direcciones_m' );
+		$this->load->model ( 'procurador_m');
 		
 
 		if (!$this->session->userdata('usuario_id')){ redirect('admin/adm/login');}
@@ -24,6 +29,9 @@ class Importar extends CI_Controller {
 		$this->array_return['usuarios_insert'] = 0;
 		$this->array_return['usuarios_update'] = 0;
 		$this->array_return['elimin'] = 0;
+		$this->array_return['cuentas_update'] = 0;
+		$array_return = array ();
+
 	}
 
 	// INICIO USUARIO 
@@ -482,7 +490,153 @@ class Importar extends CI_Controller {
 	// TERMINAR CUENTAS 
 	
 	// FIN HISTORIAL CUENTA 
+	#################### importar direcciones##################
+
+	public function importar_excel_dir(){
+		ini_set('precision', '20');
+		//echo "---->".$tipo; die;
+		//$this->load->helper ( 'excel_reader2' );
+		$array_return = array ();
 	
+		$this->data ['operacion'] = FALSE;
+		
+		$rows_insert = array();
+		
+		//Limpiar errores
+		//$this->error_castigo_m->delete_all();
+
+		// ojo ss
+		$uploadpath = "./uploads/importar_direcciones.xlsx";
+		
+		$this->load->library('PHPExcel');
+		$inputFileType = PHPExcel_IOFactory::identify($uploadpath);
+		$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+		
+		$excel = $objReader->load($uploadpath);
+
+		$excel->setActiveSheetIndex(0);
+		$sheet = $excel->getActiveSheet();
+		$rowcount = $sheet->getHighestRow();
+		$columncount = $sheet->getHighestColumn();
+
+
+		for($i = 2; $i <= $rowcount; $i++) {
+			$rut = trim($sheet->getCellByColumnAndRow('A'. $i)->getValue());
+			$dv = trim ( $sheet->getCellByColumnAndRow('B'. $i)->getValue());
+			$cuenta_rut = trim ( $sheet->getCellByColumnAndRow('C'. $i)->getValue());
+			$datos = trim ( $sheet->getCellByColumnAndRow('D'. $i)->getValue());
+		
+			
+			$direcciones = array(
+				'Rut'  => $rut,
+      			'Dv'   => $dv,
+    			'Cuenta_rut'    => $cuenta_rut,
+    			'Datos'  => $datos,
+			);
+			$this->procurador_m->save_default($fields_save, $direcciones->id);
+							$this->array_return['cuentas_update'];
+			//consultar cuentas por operacion
+			
+		}
+	}
+
+	public function importar_excel_dias_mora(){
+		ini_set('precision', '20');
+		$array_return = array ();
+		$array_return['cuentas_insert'] = 0;
+		$array_return['cuentas_update'] = 0;
+	//	$array_return['mora_update'] = 0;
+		$array_return['usuarios_insert'] = 0;
+		$array_return['usuarios_update'] = 0;
+	
+		$this->data ['cuentas'] = FALSE;
+		
+		$rows_insert = array ();
+		
+		// ojo ss
+		$uploadpath = "./uploads/importar_direcciones.xls";
+		$this->load->library('PHPExcel');
+        $inputFileType = PHPExcel_IOFactory::identify($uploadpath);
+		$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+		$excel = $objReader->load($uploadpath);
+		$excel = $excel->getSheet(1);  //Numero de la hoja activa a importar
+		$rowcount = $excel->getHighestRow();
+		//$highestcolumn = $excel->getHighestColumn();
+		
+		$id_usuario = $this->session->userdata('usuario_id');
+		
+		if($this->$dato=array())
+		
+		for($i = 2; $i <= $rowcount; $i ++){
+			
+			$rut = trim($sheet->getCell('A'. $i)->getValue());
+			$dv = trim ( $sheet->getCell('B'. $i)->getValue());
+			$cuenta_rut = trim ( $sheet->getCell('C'. $i)->getValue());
+			$datos = trim ( $sheet->getCell('D'. $i)->getValue());
+		
+			
+			$dato = array();
+		
+			$this->procurador_m->save_default($fields_save, $id);
+							$this->array_return['cuentas_update']++;
+		
+		} // FIN FOR 
+	}
+	function cargar_excel_mora( $accion = ''){
+		//$this->output->enable_profiler ( TRUE );
+	if (!$this->session->userdata('usuario_id')){redirect('login');}
+	  $this->load->model ('procurador_m');
+	  $this->data['plantilla'] = 'importar/';
+	  $view = 'cargar_mora';
+	  $this->data['plantilla'].=$view;
+	  $this->data['archivos'] = array();
+	  $this->data['error'] = array();
+	  $this->data['archivo'] = '';
+	  $this->data['operacion'] = FALSE;
+	  /* cargar archivo*/
+
+	  if ($accion == 'guardar_archivo'){
+		  $nombre_archivo = date('YmdHis');		
+		  $config['upload_path'] = './uploads/';
+		  $config['allowed_types'] = '*';
+		  $config['max_size']	= '5120';
+		  /*$config['max_width']  = '2048';
+		  $config['max_height']  = '1080';*/
+		  $this->load->library('upload', $config);
+		  
+		  if (! $this->upload->do_upload ("archivo_1")) {
+			  $this->data['error'] = array ('error' => $this->upload->display_errors () );
+		  } else {
+			  $this->data['archivos'] = array($this->upload->data());  
+			  rename ( $this->data['archivos'][0]['full_path'], './uploads/importar_direcciones.xls' );
+			  if (is_file($this->data['archivos'][0]['full_path'])){
+				  //unlink ( $this->data['archivos'][0]['full_path'] );
+			  }
+		  }
+	  }
+	  ///////////////////////////////////////
+	  if (is_file('./uploads/importar_direcciones.xls')){ $this->data['archivo'] = './uploads/importar_direcciones.xls'; }
+	  
+	  $a=$this->procurador_m->get_all();
+	 //$this->data['procurador'][0]='Seleccionar Mandante';
+	  foreach ($a as $obj) {$this->data['cuentas'][$obj->rut] = $obj->dv;}
+	  
+	  if ($accion == 'importar_archivo'){
+		  $array_return = array();
+		  if( $this->nodo->id == 'fullpay'){
+			  $this->importar_excel_dias_mora();
+		  }
+		  
+		  $this->data['cuentas_insert'] = $this->array_return['cuentas_insert'];
+		  $this->data['cuentas_update'] = $this->array_return['cuentas_update'];
+		  $this->data['rut'] = FALSE;
+	  }
+	  $this->load->view ( 'backend/index', $this->data );
+  }
+
+
+####### fin dir#######
+
 	//EMPEZAR TELÉFONO
 	// $tipos = array('0'=>'Tipo','1'=>'Particular','2'=>'Comercial','3'=>'Celular','4'=>'Otro');
 	public function revisar_telefonos($idcuenta,$datos = array()){
@@ -580,6 +734,175 @@ class Importar extends CI_Controller {
 	    }
 		
 		return $idprocurador;
+	}
+	###########################importar direcciones################################
+	###############################################################################
+
+	function form1($action='',$id=''){if (!$this->session->userdata('usuario_id')){redirect('login');}
+	$this->load->model ( 'abogados_m' );
+	$this->data['plantilla'] = 'importar/';
+	$view = 'cargar';
+	$this->data['plantilla'].=$view;
+	$this->data['archivos'] = array();
+	$this->data['error'] = array();
+	$this->data['archivo'] = '';
+	$this->data['operacion'] = FALSE;
+	/* cargar archivo*/
+	
+	 if ($accion == 'guardar_archivo'){
+		$nombre_archivo = date('YmdHis');		
+		$config['upload_path'] = './uploads/';
+		$config['allowed_types'] = '*';
+		$config['max_size']	= '5120';
+		/*$config['max_width']  = '2048';
+		$config['max_height']  = '1080';*/
+		$this->load->library('upload', $config);
+		
+		if (! $this->upload->do_upload ("archivo_1")) {
+			$this->data['error'] = array ('error' => $this->upload->display_errors() );
+		} else {
+			$this->data['archivos'] = array($this->upload->data());  
+			rename ( $this->data['archivos'][0]['full_path'], './uploads/importar.xls' );
+			if (is_file($this->data['archivos'][0]['full_path'])){
+				//unlink ( $this->data['archivos'][0]['full_path'] );
+			}
+		}
+		$this->data['id_abogado'] = $this->input->post('pjud');
+		$this->data['bandera'] = $this->input->post('pjud');
+	}
+	///////////////////////////////////////
+	if (is_file('./uploads/importar.xls')){ $this->data['archivo'] = './uploads/importar.xls'; }
+	
+	$abogados = array(0=>'Seleccionar');
+	$a = $this->abogados_m->get_many_by(array('activo'=>'S'));
+	foreach ($a as $obj) {
+		$abogados[$obj->id] = $obj->nombres.' '.$obj->ape_pat;
+	}
+
+	$this->data['abogados'] = $abogados;
+
+	if ($accion == 'importar_archivo'){
+		$this->form_validation->set_rules('id_abogado', 'Abogado', 'trim|required|is_natural_no_zero');
+		if ($this->form_validation->run() == TRUE){
+			$abogado = $this->input->post('id_abogado');
+			if( $this->nodo->nombre == 'fullpay'){
+				$this->importar_excel_nodo_fullpay($abogado);
+				//die();
+			}
+			if($this->input->post('bandera')){
+				redirect('admin/cuentas');
+			}
+			$this->data['usuarios_insert'] = $this->array_return['usuarios_insert'];
+			$this->data['usuarios_update'] = $this->array_return['usuarios_update'];
+			$this->data['cuentas_insert'] = $this->array_return['cuentas_insert'];
+			//$this->data['cuentas_update'] = $this->array_return['cuentas_update'];
+			$this->data['operacion'] = TRUE;
+		} else {
+			//echo 'falla mandante';
+		}
+	}
+	$this->load->view ( 'backend/index', $this->data );
+	}
+
+	
+	public function importar_excel_direcciones(){
+		//ini_set('precision', '20');
+		//echo "---->".$tipo; die;
+		//$this->load->helper ( 'excel_reader2' );
+		$array_return = array ();
+	
+		$this->data ['rut'] = FALSE;
+		
+		$rows_insert = array ();
+		$rows_insert = array ();
+		
+		//Limpiar telefonos anteriores
+		//$today = date("Y-m-d");
+		//$this->db->select('dir.id');
+		//$this->db->from('0_cuentas dir');
+		//$this->db->where("fecha_borrado is null or fecha_borrado < '{$today}'");
+		//$query = $this->db->get();
+		//$bloqueados = $query->result();
+		//foreach($bloqueados as $k => $v){
+		//	$this->telefonos_bloqueados_m->delete_by(array('id' => $v->id));
+		//}
+
+		// ojo ss
+		$uploadpath = "./uploads/importar_direcciones.xlsx";
+		
+		$this->load->library('PHPExcel');
+		$inputFileType = PHPExcel_IOFactory::identify($uploadpath);
+		$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+		
+		$excel = $objReader->load($uploadpath);
+
+		$excel->setActiveSheetIndex(0);
+		$sheet = $excel->getActiveSheet();
+		$rowcount = $sheet->getHighestRow();
+
+		for($i = 1; $i <= $rowcount; $i++) {
+			//$operacion = trim($sheet->getCell('A'. $i)->getValue());
+			$rut = trim ($sheet->getCell('A'. $i)->getValue());
+			$dv = trim($sheet->getCell('B'. $i)->getValue());
+			$cuenta_rut = trim($sheet->getCell('C'. $i)->getValue());
+			$datos = trim($sheet->getCell('D'. $i)->getValue());
+			
+			//consultar direcciones por rut
+			if($rut){
+				//Insertar dirrrr //t
+				$procurador = $this->procurador_m->get_by(array("rut" => $rut));
+				if($procurador){
+					$procurador = $this->procurador_m->get_by(array("id"));
+					if($procurador)
+						$this->array_return['cuentas_update']++;
+					else{
+						$fields_save = array();
+						$fields_save['rut'] = $rut;
+						$fields_save['dv'] = $dv;
+						$fields_save['cuenta_rut'] = $cuenta_rut;
+						$fields_save['datos'] = $datos;
+						$this->procurador_m->insert($fields_save, TRUE, TRUE);
+						$this->array_return['cuentas_insert']++;
+					}
+				}
+			}
+			elseif($rut){
+				$this->db->select('cta.*');
+				$this->db->from('0_cuentas cta');
+			  	//$this->db->join("0_usuarios usr","cta.id_usuario=usr.id");
+				//$this->db->where("rut like '{$rut}%' and cta.activo = 'S'");
+				$this->db->group_by('cta.id');
+				$query = $this->db->get();
+				$cuentas = $query->result();
+				if($cuentas){
+					foreach($cuentas as $k => $v){
+						$bloqueado = $this->procurador_m->get_by(array("id" => $v->id, 'rut' => $rut));
+						if($bloqueado)
+							$this->array_return['cuentas_update']++;
+						else{
+							if($rut){
+								$fields_save = array();
+								$fields_save['rut'] = $rut;
+								$fields_save['dv'] = $dv;
+								$fields_save['cuenta_rut'] = $cuenta_rut;
+								$fields_save['datos'] = $datos;
+								$this->procurador_m->insert($fields_save, TRUE, TRUE);
+								$this->array_return['cuentas_insert']++;
+							}
+							if($dv){
+								$fields_save = array();
+								$fields_save['rut'] = $rut;
+								$fields_save['dv'] = $dv;
+								$fields_save['cuenta_rut'] = $cuenta_rut;
+								$fields_save['datos'] = $datos;
+								$this->procurador_m->insert($fields_save, TRUE, TRUE);
+								$this->array_return['cuentas_insert']++;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
     ###################### IMPORTAR EXCEL ESTADO DIARIO ###########################

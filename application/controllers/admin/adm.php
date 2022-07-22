@@ -47,7 +47,7 @@ class Adm extends CI_Controller {
 					$this->session->set_userdata("sistema", "estadodiario");
 					$this->session->set_userdata("usuario_perfil",$es_usuario_valido->perfil);
 					if( $this->session->userdata("usuario_perfil") != 3 ){
-						redirect('admin/cuentas/');
+						redirect('admin/procurador/');
 					}else{
 						redirect('admin/procurador/');
 					}
