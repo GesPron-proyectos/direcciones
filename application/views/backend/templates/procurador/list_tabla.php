@@ -8,6 +8,5 @@
 	<td><?php echo $val->dv;?></td>
 	<td><?php echo $val->cuenta_rut;?></td>
 	<td><?php echo $val->datos;?></td> 
-	
 </tr>
 <?php ++$i;endforeach;?>

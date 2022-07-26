@@ -1,30 +1,32 @@
-<div class="table-m-sep">
-
+<?php $rut = ''; if (isset($_REQUEST['rut'])){$rut = $_REQUEST['rut'];} ?>
+<div class="table-m-sep-title">
+<h2><strong>Direcciones(<?php echo number_format($total,0,',','.');?>)</strong></h2>
 </div>
-
 <div class="agregar-noticia">
 	<div class="agregar">
 		<a class="nueva" href="<?php echo site_url();?>/admin/importar/cargar_excel_mora/">IMPORTAR DIRECCIONES</a>
 	</div>
-	<div class="agregar">
-		<a class="nueva" href="<?php echo site_url();?>/admin/procurador/form2/">CREAR PROCURADOR</a>
-	</div>
-	<div class="agregar">
-		<a class="nueva" href="<?php echo site_url();?>/admin/importar/importar_excel_dir/">import</a>
-	</div>
-	<div class="clear height"></div>
-</div>
+	
 
+<div class="tabla-listado">
+      <form action="<?php echo site_url().'/admin/procurador/';?>" method="get">
+
+          <label style="width:135px; float:center">RUT:</label>
+          <input rut="rut" name="rut" type="text" value="<?php echo $rut;?>" style="width:100px;">
+          <input type="submit" name="Buscar" value="Buscar" class="boton" style="width:7%;">
+      </form>
+  </div>
+<?php echo $this->pagination->create_links(); ?>
 <div class="clear"></div>
 <div class="tabla-listado">
+	
     <table class="listado" width="100%">
 		<tr class="menu">
-			<td class="nombre">ID</td>
+			<td class="id">ID</td>
 			<td class="nombre">RUT</td>
 			<td class="apellido">Digito Verificador</td>
 			<td class="rut">Cuenta RUT</td>
-			<td class="correo">DATOS</td>
-
+			<td class="correo">Direccion</td>
 		</tr>
 
 		<div class="content_tabla">
@@ -35,4 +37,3 @@
 		</div>
     </table>
 </div>
-<?php echo $this->pagination->create_links(); ?>

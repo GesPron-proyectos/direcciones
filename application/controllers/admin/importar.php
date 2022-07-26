@@ -35,6 +35,47 @@ class Importar extends CI_Controller {
 	}
 
 	// INICIO USUARIO 
+	public function index($action='',$id='') {
+		
+		//$this->output->enable_profiler(TRUE);
+		$config['suffix'] = '';
+		$this->db->where( array( 'activo'=>'S' ) );
+		$this->db->select('*');
+		//$query = $this->db->get_etapas('s_etapas');
+		$like = array();
+		$config['per_page'] = '50';
+		$config['uri_segment'] = '4';
+		
+	    $config['base_url'] = site_url().'/admin/procurador/index/';
+	    $this->data['current_pag'] = $this->uri->segment(4);
+	    
+	 	if (isset($_REQUEST['etapa']) && $_REQUEST['etapa']!=''){
+			$like['s1.etapa'] = $_REQUEST['etapa'];  
+	   		if ($config['suffix']!=''){ $config['suffix'].='&';}
+	   		$config['suffix'].= 'etapa='.$_REQUEST['etapa'];
+    	}
+	    
+	  	if (isset($_REQUEST['codigo']) && $_REQUEST['codigo']!=''){
+			$like['s1.codigo'] = $_REQUEST['codigo'];  
+	   		if ($config['suffix']!=''){ $config['suffix'].='&';}
+	   		$config['suffix'].= 'codigo='.$_REQUEST['codigo'];
+    	}   
+	    	
+		//$this->db->where( array( 'activo'=>'S' ) );
+		//$this->db->select('*');
+		
+		$query=$this->etapas_m->get_etapas($like);
+		$this->data['lists'] = $query;
+        $this->data['total'] = $config['total_rows'] = count($query);
+		
+		$this->load->library('pagination');
+	    $this->pagination->initialize($config);
+
+		$this->data['plantilla']	= 'etapas_juicio/list'; 
+		$this->load->view ( 'backend/index', $this->data );
+
+
+	}
 	public function revisar_usuario($rut, $datos=array()){
 		$idusuario = '';
 		

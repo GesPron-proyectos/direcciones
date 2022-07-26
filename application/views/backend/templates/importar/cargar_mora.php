@@ -7,7 +7,7 @@ $(document).ready(function(){
 	});
 
 	$("#btn-importar").click(function(){
-		if(confirm("Está seguro que desea importar el archivo de días mora")){
+		if(confirm("Está seguro que desea importar las direcciones")){
 			$("#myform").submit();
 		}
 		else return false;
@@ -59,7 +59,7 @@ $(document).ready(function(){
 
     <div class="clear height"></div>
 
-    <input type="submit" value="Subir Archivo" class="boton" style="width:140px; float:left;">
+    <input type="submit" value="Subir Archivo" class="boton" style="width:10px; float:left;">
 
     <div class="clear"></div>
     
@@ -88,7 +88,7 @@ $(document).ready(function(){
 		</div>
 		<div class="clear height"></div>
 	<?php echo form_close();?>
-	<?php if ($operacion):?>
+	<?php if ($id):?>
 	<div class="cont-form">
 	Importación exitosa.<br>
 	Datos actualizados, cuenta(s): <?php echo $cuentas_update; ?>.<br>

@@ -45,7 +45,7 @@
 
 <?php if ($current=='procurador'):?>
 
-<div class="mainmenu">
+<div class="">
 
 <ul>
 
