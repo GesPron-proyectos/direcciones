@@ -6,7 +6,43 @@ class procurador_m extends EMP_Model{
 		parent::__construct();
 		$this->_table = '0_cuentas';
 		$this->primary_key = 'id';
-		$this->alias = 'dir';
+		$this->alias = 'cta';
+	}
+	public function get_direcciones_lista($like){
+		
+		$this->db->from ( "0_cuentas cta" );
+		    
+      if(count($like>0)){$this->db->like($like);}
+		    $cols = array();
+			$cols [] = 'cta.rut AS rut';
+			$cols [] = 'cta.dv AS dv';
+			$cols [] = 'cta.cuenta_rut AS cuenta_rut';
+			$cols [] = 'cta.datos AS datos';
+			$this->db->where ( array ('cta.activo' => 'S' ) );
+			
+			$this->db->select($cols);
+
+       		$this->db->where('cta.rut','');
+			$query = $this->db->get();
+			return $query;	
+	}
+	 public function get_comuna_list(){
+		
+		$this->db->from ( "0_cuentas cta" );
+		    
+		  $cols = array();
+			$cols [] = 'cta.rut AS rut';
+			$cols [] = 'cta.dv AS dv';
+			$cols [] = 'cta.cuenta_rut AS cuenta_rut';
+			$cols [] = 'cta.datos AS datos';
+			
+			$this->db->where ( array ('cta.activo' => 'S' ) );
+			
+			$this->db->select($cols);
+
+       		$this->db->where('cta.rut',$rut);
+			$query = $this->db->get();
+			return $query->result();	
 	}
 	public function get_direcciones($like) {
 		

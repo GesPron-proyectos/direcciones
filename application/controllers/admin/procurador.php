@@ -33,28 +33,30 @@ class Procurador extends CI_Controller {
 		$this->array_return['elimin'] = 0;
 		$this->array_return['cuentas_update'] = 0;
 		
-		
 	}
+	public function direcciones($rut='') {
+		
+		$view='list';  //lista
+		$this->data['plantilla'].= $view;	
+		$config['uri_segment'] = '4';
+		$this->data['rut'] = $rut;
+		$this->data['current_pag'] = $this->uri->segment(4);	
+
+		$this->data['plantilla']= $this->procurador_m->get_direcciones_list();
+		
+		$this->load->view ( 'backend/index', $this->data );
+	}
+
 
 	function gen($action,$id){$this->index($action,$id);}
 	
 	function index($action='',$id='') {
-		$query=$this->procurador_m->list_sistema(array());
+		$query=$this->procurador_m->get_direcciones_lista(array());
 		$this->data['lists'] = $query;
         $this->data['total'] = $config['total_rows'] = count($query);
 
 		$view='list';
 		$this->data['plantilla'].= $view;	
-
-
-		if($action == 'buscar'){
-			$query=$this->procurador_m->buscardata(result);
-		$this->data['lists'] = $query;
-        $this->data['total'] = $config['total_rows'] = count($query);
-
-		$view='list';
-		$this->data['plantilla'].= $view;
-		}	
 
 		if ($action=='actualizar'){
 			$this->procurador_m->update($id, $_POST);
@@ -65,41 +67,19 @@ class Procurador extends CI_Controller {
 		
 		
 		if ($view=='list'){
-			
 			/*paginacion*/
 			$this->load->library('pagination');
-			$config['base_url'] = site_url().'/admin/procurador/index/';
-			$config['total_rows'] = $this->db->where("activo","S")->count_all_results("0_cuentas");
+			$config['base_url'] = site_url().'/admin/procurador/list';
+			$config['total_rows'] = $this->db->where("activo","S")->count_all_results("0_cuentas cta");
 			$config['per_page'] = '35'; //$config['num_links'] = '10';
 			$config['suffix'] = '';
 
 			$like = array();
-			if (isset($_REQUEST['rut']) && $_REQUEST['rut']!=''){
-				$like['rut'] =  $_REQUEST['rut'];  
+			if (isset($_REQUEST['rut']) && $_REQUEST['rut']!=''){ 
+				$where["cta.rut"] = $_REQUEST['rut'];
 				if ($config['suffix']!=''){ $config['suffix'].='&';}
 				$config['suffix'].= 'rut='.$_REQUEST['rut'];
 			}
-			$this->db->flush_cache();
-
-
-			$query =$this->db->select('
-								cta.rut AS rut,
-								cta.dv AS dv,
-								cta.cuenta_rut AS cuenta_rut,
-								cta.datos AS datos
-								')	 
-						->like("cta.rut")
-						->get("0_cuentas cta", $config['per_page'], $this->data['current_pag']);
-			
-						$this->data['lists'] = $query->result();
-						$this->data['total'] = $config['total_rows'];
-			
-			//$total_rows = $query_total->result();
-		
-	    	$config['per_page'] = '30';
-	    	
-	    	$this->pagination->initialize($config);
-			
 			
 			$query =$this->db->select('
 								cta.rut AS rut,
@@ -109,14 +89,14 @@ class Procurador extends CI_Controller {
 								')	 
 					//	->where("cta.activo","S")
 						->like("rut")
-						->distinct("")
+						//->distinct("")
 						->get("0_cuentas cta", $config['per_page'], $this->data['current_pag']);
 			
 			$this->data['lists'] = $query->result();
 			$this->data['total'] = $config['total_rows'];
 		}
-		
 		if ($this->show_tpl){
+			$this->data['plantilla'] = 'procurador/list'; 
 			$this->load->view('backend/index', $this->data);
 		}
 	}

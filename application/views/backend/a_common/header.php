@@ -8,11 +8,7 @@
 
     <ul>   
 		<li><a href="<?php echo site_url();?>/admin/administradores" style="border-left:none;"<?php if ($current=='administradores'){echo ' id="current"';}?>> ADMINISTRADORES</a></li>
-		<li><a href="<?php echo site_url();?>/admin/cuentas"<?php if ($current=='cuentas'){echo ' id="current"';}?>>ED DIARIO ABOGADOS</a></li>
-		<li><a href="<?php echo site_url();?>/admin/roles"<?php if ($current=='roles'){echo ' id="current"';}?>>ED ROLES</a></li>
-		<li><a href="<?php echo site_url();?>/admin/control_envios"<?php if ($current=='control_envios'){echo ' id="current"';}?>>CONTROL ENVIOS</a></li>
 		<li><a href="<?php  echo site_url()?>/admin/procurador"<?php  if ($current=='procurador'){echo ' id="current"';}?>>PROCURADOR</a></li>
-		<li><a href="<?php  echo site_url()?>/admin/abogado"<?php  if ($current=='abogado'){echo ' id="current"';}?>>ABOGADO</a></li>
 	</ul>
 
 </div>
