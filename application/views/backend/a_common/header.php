@@ -8,7 +8,7 @@
 
     <ul>   
 		<li><a href="<?php echo site_url();?>/admin/administradores" style="border-left:none;"<?php if ($current=='administradores'){echo ' id="current"';}?>> ADMINISTRADORES</a></li>
-		<li><a href="<?php  echo site_url()?>/admin/procurador"<?php  if ($current=='procurador'){echo ' id="current"';}?>>PROCURADOR</a></li>
+		<li><a href="<?php  echo site_url()?>/admin/procurador"<?php  if ($current=='procurador'){echo ' id="current"';}?>>DIRECCIONES</a></li>
 	</ul>
 
 </div>

@@ -12,8 +12,8 @@
 	?>
   <div class="clear height"></div>
    <form action="<?php echo site_url().'/admin/procurador';?>" method="post">
-    <label style="width:135px; float:left">RUT:</label>
-      <input id="rut" name="rut" type="text" value="<?php echo $rut;?>" style="width:300px;">
+    <label style="width:135px; float:center">RUT:</label>
+      <input id="rut" name="rut" type="text" value="<?php echo $rut;?>" style="width:100px;">
    <input type="submit" name="Buscar" value="Buscar" class="boton" style="width:7%;">
     </form>
      <div class="clear"></div>

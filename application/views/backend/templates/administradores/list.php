@@ -1,16 +1,5 @@
 <div class="table-m-sep">
 
-  <div class="table-m-sep-title"> 
-
-    
-
-    <!--h2><strong>Rubros</strong></h2-->
-
-    
-
-    <?php $this->load->view('backend/templates/mod/cat_tools');?>
-
-  </div>
 
 </div>
 
@@ -33,7 +22,6 @@
     <tr class="menu">
 
       <td width="41%" class="nombre">Usuario</td>
-
       <td width="35%" class="nombre">Perfil</td>
       <td width="35%" class="nombre">ID</td>
       <td width="35%" class="herramientas">Herramientas</td>

@@ -36,6 +36,10 @@ class Procurador extends CI_Controller {
 	}
 	public function direcciones($rut='') {
 		
+		$query=$this->procurador_m->list_sistema(array());
+		$this->data['lists'] = $query;
+        $this->data['total'] = $config['total_rows'] = count($query);
+
 		$view='list';  //lista
 		$this->data['plantilla'].= $view;	
 		$config['uri_segment'] = '4';
@@ -61,7 +65,34 @@ class Procurador extends CI_Controller {
 
 		$view='list';
 		$this->data['plantilla'].= $view;	
+		if($action =='buscar'){
+			$this->load->library('pagination');
+			$config['base_url'] = site_url().'/admin/procurador/buscar';
+			$config['total_rows'] = $this->db->where("activo","S")->count_all_results("0_cuentas cta");
+			$config['per_page'] = '35'; //$config['num_links'] = '10';
+			$config['suffix'] = '';
 
+			$like = array();
+			if (isset($_REQUEST['rut']) && $_REQUEST['rut']!=''){ 
+				$where["cta.rut"] = $_REQUEST['rut'];
+				if ($config['suffix']!=''){ $config['suffix'].='&';}
+				$config['suffix'].= 'rut='.$_REQUEST['rut'];
+			}
+			$query =$this->db->select('
+								cta.rut AS rut,
+								cta.dv AS dv,
+								cta.cuenta_rut AS cuenta_rut,
+								cta.datos AS datos,
+								cta.fecha_crea AS fecha_crea
+								')	 
+						->where("cta.activo","S")
+						->where("rut","")
+						->distinct("rut")
+						->get("0_cuentas cta", $config['per_page'], $this->data['current_pag']);
+			
+			$this->data['lists'] = $query->result();
+			$this->data['total'] = $config['total_rows'];
+		}
 		if ($action=='actualizar'){
 			$this->procurador_m->update($id, $_POST);
 			$this->show_tpl = FALSE;
