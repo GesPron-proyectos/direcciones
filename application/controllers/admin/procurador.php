@@ -41,7 +41,11 @@ class Procurador extends CI_Controller {
 		$config['uri_segment'] = '4';
 		$this->data['rut'] = $rut;
 		$this->data['current_pag'] = $this->uri->segment(4);	
-
+		if (isset($_REQUEST['rut']) && $_REQUEST['rut']!=''){ 
+			$where["cta.rut"] = $_REQUEST['rut'];
+			if ($config['suffix']!=''){ $config['suffix'].='&';}
+			$config['suffix'].= 'rut='.$_REQUEST['rut'];
+		}
 		$this->data['plantilla']= $this->procurador_m->get_direcciones_list();
 		
 		$this->load->view ( 'backend/index', $this->data );
@@ -85,7 +89,8 @@ class Procurador extends CI_Controller {
 								cta.rut AS rut,
 								cta.dv AS dv,
 								cta.cuenta_rut AS cuenta_rut,
-								cta.datos AS datos
+								cta.datos AS datos,
+								cta.fecha_crea AS fecha_crea
 								')	 
 					//	->where("cta.activo","S")
 						->like("rut")

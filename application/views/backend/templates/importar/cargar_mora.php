@@ -59,7 +59,7 @@ $(document).ready(function(){
 
     <div class="clear height"></div>
 
-    <input type="submit" value="Subir Archivo" class="boton" style="width:10px; float:left;">
+    <input type="submit" value="Subir Archivo" class="boton" style="width:120px; float:left;">
 
     <div class="clear"></div>
     

@@ -1,14 +1,15 @@
-<?php $rut = ''; if (isset($_REQUEST['rut'])){$rut = $_REQUEST['rut'];} 
-	$rut_parcial = ''; if (isset($_REQUEST['rut_parcial'])){$rut_parcial = $_REQUEST['rut_parcial'];}
-	?>
 
 <div class="table-m-sep-title">
 <h2><strong>Direcciones(<?php echo count($lists);?>)</strong></h2>
 </div>
 <div class="agregar-noticia">
   <div class="agregar"> 
-  	<a class="nueva" href="<?php echo site_url();?>/admin/procurador/importar">Importar Direcciones</a>
+  	<a class="nueva" href="<?php echo site_url();?>/admin/importar/cargar_excel_mora">Importar Direcciones</a>
   </div>
+
+  <?php $rut = ''; if (isset($_REQUEST['rut'])){$rut = $_REQUEST['rut'];} 
+	$rut_parcial = ''; if (isset($_REQUEST['rut_parcial'])){$rut_parcial = $_REQUEST['rut_parcial'];}
+	?>
   <div class="clear height"></div>
    <form action="<?php echo site_url().'/admin/procurador';?>" method="post">
     <label style="width:135px; float:left">RUT:</label>
@@ -28,6 +29,7 @@
 			<td class="apellido">Digito Verificador</td>
 			<td class="rut">Cuenta RUT</td>
 			<td class="correo">Direccion</td>
+			<td class="fecha_crea">Fecha</td>
 		</tr>
 		<div class="content_tabla">
 		  <?php if (count($lists)>0): ?>
