@@ -88,7 +88,7 @@ $(document).ready(function(){
 		</div>
 		<div class="clear height"></div>
 	<?php echo form_close();?>
-	<?php if ($id):?>
+	<?php if ($operacion):?>
 	<div class="cont-form">
 	Importación exitosa.<br>
 	Datos actualizados, cuenta(s): <?php echo $cuentas_update; ?>.<br>

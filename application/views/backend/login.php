@@ -3,7 +3,8 @@
 <div class="wrapper">
   <div class="cont">
     <div class="panel">
-    <span class="header-blk-right-2">Sistema de Cobranza <b>fv1r3285</b></span>
+    <span class="header-blk-right-2">Sistema de Direcciones 
+      <b>fv1r3285</b></span>
     </div>
     <div class="registrar">
       <div class="table-m-sep-title">
