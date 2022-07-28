@@ -29,7 +29,6 @@
 			<td class="apellido">Digito Verificador</td>
 			<td class="rut">Cuenta RUT</td>
 			<td class="correo">Direccion</td>
-			<td class="fecha_crea">Fecha</td>
 		</tr>
 		<div class="content_tabla">
 		  <?php if (count($lists)>0): ?>

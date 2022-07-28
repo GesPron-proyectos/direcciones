@@ -10,6 +10,5 @@
 	<td><?php echo $val->dv;?></td>
 	<td><?php echo $val->cuenta_rut;?></td>
 	<td><?php echo $val->datos;?></td> 
-	<td><?php echo $val->fecha_crea;?></td>
 </tr>
 <?php ++$i;endforeach;?>
