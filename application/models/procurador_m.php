@@ -44,36 +44,7 @@ class procurador_m extends EMP_Model{
 			$query = $this->db->get();
 			return $query->result();	
 	}
-	public function get_direcciones($like) {
-		
-		$this->db->from ( "0_cuentas cta" );
-		
-		if(count($like>0)){$this->db->like($like);}
-		$cols = array();
-		
-			//$cols [] = 'dir.id AS id';
-			$cols [] = 'cta.rut AS rut';
-			$cols [] = 'cta.dv AS dv';
-			$cols [] = 'cta.cuenta_rut AS cuenta_rut';
-			$cols [] = 'cta.datos AS datos';
-		
-		
-			$this->db->select($cols);
-			$this->db->where('cta.rut');
-       		$this->db->order_by ( 'cta.id ASC');
-       		$this->db->group_by('cta.id');
-			$query = $this->db->get();
-			return $query->result();
-		
-		$this->db->where ( array ('cta.activo' => 'S' ) );
-		
-		/*if($idpadre != ''){
-			$this->db->where ( array ('c.id' => $idpadre ) );
-			} */
-		$this->db->order_by ('cta.id ASC');
-		$query = $this->db->get ();
-		return $query->result ();
-	}
+	
 	public function list_sistema(){
 		
 		$this->db->from ( "0_cuentas cta" );

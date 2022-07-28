@@ -569,16 +569,15 @@ class Importar extends CI_Controller {
 		if($this->$dato=array())
 		
 		for($i = 2; $i <= $rowcount; $i ++){
-			$id = trim($sheet->getCell('A'. $i)->getValue());
-			$rut = trim($sheet->getCell('B'. $i)->getValue());
-			$dv = trim ( $sheet->getCell('C'. $i)->getValue());
-			$cuenta_rut = trim ( $sheet->getCell('D'. $i)->getValue());
-			$datos = trim ( $sheet->getCell('E'. $i)->getValue());
+			$rut = trim($sheet->getCell('A'. $i)->getValue());
+			$dv = trim ( $sheet->getCell('B'. $i)->getValue());
+			$cuenta_rut = trim ( $sheet->getCell('C'. $i)->getValue());
+			$datos = trim ( $sheet->getCell('D'. $i)->getValue());
 		
 			
 			$dato = array();
 		
-			$this->procurador_m->save_default($fields_save, $id);
+			$this->procurador_m->update($fields_save, $id);
 							$this->array_return['cuentas_update']++;
 		
 		} // FIN FOR 
