@@ -74,13 +74,30 @@ class Procurador extends CI_Controller {
 	############### importar direcciones #################
 	######################################################
 	
+	public function direcciones($id='') {
+		//$this->output->enable_profiler(TRUE); 
+		
+		$view='list';  //lista
+		$this->data['plantilla'].= $view;	
+		$config['uri_segment'] = '4';
+		$this->data['id_cuenta'] = $id;
+		$this->data['current_pag'] = $this->uri->segment(4);	
 
+		$this->data['lists']= $this->procurador_m->get_comuna_list();
+		
+		//print_r($this->data['lists']);
+		
+		
+		$this->load->view ( 'backend/index', $this->data );
+		$this->data['lists'] = $query->result();
+			$this->data['total'] = $config['total_rows'];
+	}
 
 
 	function gen($action,$id){$this->index($action,$id);}
-	
+
 	function index($action='',$id='') {
-		
+
 		$view='list';
 		$this->data['plantilla'].= $view;	
 
@@ -144,7 +161,71 @@ class Procurador extends CI_Controller {
 		}
 	}
 
+	public function searchfunction($rut='')
+    {
 
+
+
+		//$view='list';
+		//$this->data['plantilla'].= $view;	
+
+		$view='list';
+		$this->data['plantilla'].= $view;	
+
+		$config['uri_segment'] = '4';
+		$this->data['current_pag'] = $this->uri->segment(4);		
+
+		if ($view=='list'){
+
+			/*paginacion*/
+			$this->load->library('pagination');
+			$config['base_url'] = site_url().'/admin/procurador/searchfunction/';
+			$this->data['rut'] = $this->procurador_m->get_by(array('rut'=>$rut,'rut'=>''));
+			
+			$query =$this->db->select('
+								cta.rut AS rut,
+								cta.dv AS dv,
+								cta.cuenta_rut AS cuenta_rut,
+								cta.datos AS datos
+								')	 
+						->where("cta.activo","S")
+					//	->where_in("cta.rut",$rut)
+						->get('0_cuentas cta');
+			
+			$total_rows = $query->result();
+			
+			//$total_rows = $query_total->result();
+			$config['total_rows'] = count($total_rows);
+	    	$config['per_page'] = '30';
+	    	
+	    	$this->pagination->initialize($config);
+			
+			
+			$query =$this->db->select('
+								cta.rut AS rut,
+								cta.dv AS dv,
+								cta.cuenta_rut AS cuenta_rut,
+								cta.datos AS datos
+								')	 
+					//	->like('cta.rut',$like)
+						//->distinct("datos")
+						//->where_in("cta.rut")
+						->get("0_cuentas cta", $config['per_page'], $this->data['current_pag']);
+			
+			$this->data['lists'] = $query->result();
+			$this->data['total'] = $config['total_rows'];
+			
+			//print_r($this->data['lists']); die;
+	//		if (!$this->show_tpl){ 
+		//		$this->data['plantilla'] = 'procurador/list_tabla';
+		//		$this->load->view('backend/templates/'.$this->data['plantilla'], $this->data);
+	//		}
+		}
+		
+		if ($this->show_tpl){
+			$this->load->view('backend/index', $this->data);
+		}
+    }
 }
 
 ?>

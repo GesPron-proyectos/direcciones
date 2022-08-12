@@ -42,10 +42,10 @@ $active_group = 'default';
 $active_record = TRUE;
 
 ############## BD ESTADO DIARIO ######################
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
+$db['default']['hostname'] = '192.168.1.32';
+$db['default']['username'] = 'gespron';
 $db['default']['password'] = 'gespron2019';
-$db['default']['database'] = 'emp_prod_forseti_mvs_estado_diario';
+$db['default']['database'] = 'direcciones';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

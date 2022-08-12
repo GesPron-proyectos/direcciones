@@ -39,13 +39,20 @@ class procurador_m extends EMP_Model{
 			$this->db->where ( array ('cta.activo' => 'S' ) );
 			
 			$this->db->select($cols);
-
-       		$this->db->where('cta.rut',$rut);
+			$this->db->distinct('rut');
 			$query = $this->db->get();
 			return $query->result();	
+			$this->data['lists'] = $query->result();
+			$this->data['total'] = $config['total_rows'];
 	}
-	
-	public function list_sistema(){
+	public function GetSearchdata()
+  {
+    $this->db->select("*");  
+    $this->db->like('rut',$this->input->get('search'));
+    $query = $this->db->get("rut"); 
+    return $query->result();
+  }
+	public function get_direcciones(){
 		
 		$this->db->from ( "0_cuentas cta" );
 		    
@@ -59,11 +66,10 @@ class procurador_m extends EMP_Model{
 		
 		
 			$this->db->select($cols);
-			$this->db->where('cta.rut');
-       		$this->db->order_by ( 'cta.id ASC');
-       		$this->db->group_by('cta.id');
+			$this->db->where_in('rut',$cols);
 			$query = $this->db->get();
-			return $query->result();	
+			return $query->result();
+			return $result[0];	
 	}
 	public function save($id,$post){
 		$fields_save = array();
